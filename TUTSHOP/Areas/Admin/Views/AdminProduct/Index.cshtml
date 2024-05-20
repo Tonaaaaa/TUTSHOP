@@ -1,0 +1,135 @@
+﻿@model IEnumerable<TUTSHOP.Models.Entities.Product>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+<div class="modal fade" id="deleteProductModal" tabindex="-1" aria-labelledby="deleteProductModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteProductModalLabel">Xác nhận xóa sản phẩm</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Bạn có chắc chắn muốn xóa sản phẩm này?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <form id="deleteProductForm" asp-action="DeleteConfirmed" method="post">
+                    <input type="hidden" id="productId" name="id" />
+                    <button type="submit" class="btn btn-danger">Xóa</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="m-2 d-flex justify-content-end m-3 ">
+    <div class="align-items-center">
+        <a class="btn btn-primary btn-tone" asp-area="Admin" asp-action="Create">Tạo mới</a>
+    </div>
+</div>
+
+
+<div class="card">
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.ProductId)</th>
+                    <th>@Html.DisplayNameFor(model => model.ImageUrl)</th>
+                    <th>@Html.DisplayNameFor(model => model.ProductName)</th>
+                    <th>@Html.DisplayNameFor(model => model.Display)</th>
+                    <th>@Html.DisplayNameFor(model => model.HotSeller)</th>
+                    <th>@Html.DisplayNameFor(model => model.Price)</th>
+                    <th>@Html.DisplayNameFor(model => model.OldPrice)</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.ProductId)</td>
+                        <td><img src="@item.ImageUrl" alt="@item.ProductName" style="max-width: 50px; max-height: 50px;"></td>
+                        <td>@Html.DisplayFor(modelItem => item.ProductName)</td>
+                        <td>
+                            @if (item.Display != true)
+                            {
+                                <span class="badge bg-danger rounded-3 fw-semibold">Không</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-success rounded-3 fw-semibold">Hiển thị</span>
+                            }
+                        </td>
+                        <td>
+                            @if (item.HotSeller != true)
+                            {
+                                <span class="badge bg-danger rounded-3 fw-semibold">Không</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-success rounded-3 fw-semibold">Bán chạy</span>
+                            }
+                        </td>
+
+                        <td class="price">@item.Price</td>
+                        <td class="old-price">@item.OldPrice</td>
+                        <td class="border-bottom-0">
+                            <div class="dropdown">
+                                <button type="button" class="btn border-0 p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                    <i class="bx bx-dots-vertical-rounded"></i>
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" asp-action="Edit" asp-route-id="@item.ProductId"><i class="bx bx-edit-alt me-1"></i>Edit</a>
+                                    <a class="dropdown-item" asp-action="Details" asp-route-id="@item.ProductId"><i class="bx bx-info-circle me-1"></i>Details</a>
+                                    <button type="button" class="dropdown-item deleteButton" data-product-id="@item.ProductId" data-bs-toggle="modal" data-bs-target="#deleteProductModal"><i class="bx bx-trash me-1"></i>Delete</button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            $('.deleteButton').on('click', function () {
+                var productId = $(this).data('product-id');
+                $('#productId').val(productId);
+            });
+
+            // Định dạng giá sản phẩm khi trang được tải
+            $('.price').each(function () {
+                var price = parseInt($(this).text());
+                var formattedPrice = price.toLocaleString('vi-VN') + " đ"; // Định dạng giá tiền và thêm đơn vị tiền tệ "đ"
+                $(this).text(formattedPrice);
+            });
+
+            // Định dạng giá cũ khi trang được tải
+            $('.old-price').each(function () {
+                var oldPrice = parseInt($(this).text());
+                var formattedOldPrice = oldPrice.toLocaleString('vi-VN') + " đ"; // Định dạng giá tiền và thêm đơn vị tiền tệ "đ"
+                $(this).text(formattedOldPrice);
+            });
+        });
+
+        // Cập nhật ID tự động
+        function updateProductId() {
+            var rows = document.querySelectorAll('.table tbody tr');
+            rows.forEach((row, index) => {
+                var productIdCell = row.querySelector('td:first-child');
+                productIdCell.textContent = index + 1;
+            });
+        }
+
+        // Gọi hàm cập nhật ID tự động khi trang được tải
+        updateProductId();
+    </script>
+}

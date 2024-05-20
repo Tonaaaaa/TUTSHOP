@@ -1,0 +1,374 @@
+﻿@using TUTSHOP.Models.Entities
+@using TUTSHOP.Extensions
+@{
+    var cart = ViewContext.HttpContext.Session.GetObjectFromJson<ShoppingCart>("Cart") ?? new ShoppingCart();
+    var cartItemCount = cart.Items.Sum(i => i.Quantity);
+}
+<header class="version_1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <div class="layer"></div><!-- Mobile menu overlay mask -->
+    <div class="main_header">
+        <div class="container">
+            <div class="row small-gutters">
+                <div class="col-xl-3 col-lg-3 d-lg-flex align-items-center">
+                    <div id="logo">
+                        <a href="index.html"><img src="img/logo.svg" alt="" width="100" height="35"></a>
+                    </div>
+                </div>
+                <nav class="col-xl-6 col-lg-7">
+                    <a class="open_close" href="#0">
+                        <div class="hamburger hamburger--spin">
+                            <div class="hamburger-box">
+                                <div class="hamburger-inner"></div>
+                            </div>
+                        </div>
+                    </a>
+                    <!-- Mobile menu button -->
+                    <div class="main-menu">
+                        <div id="header_menu">
+                            <a href="index.html"><img src="img/logo_black.svg" alt="" width="100" height="35"></a>
+                            <a href="#" class="open_close" id="close_in"><i class="ti-close"></i></a>
+                        </div>
+                        <ul class="d-flex justify-content-center">
+                            <li>
+                                <a asp-controller="Home" asp-action="Index">Home</a>
+                            </li>
+                            <li>
+                                <a asp-controller="Product" asp-action="Index">Product</a>
+                            </li>
+                            <li>
+                                <a href="blog.html">Blog</a>
+                            </li>
+                            <li>
+                                <a asp-controller="Contact" asp-action="Index">Contact</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!--/main-menu -->
+                </nav>
+                <div class="col-xl-3 col-lg-2 col-md-3">
+                    <ul class="top_tools">
+                        <li>
+                            <div class="dropdown dropdown-cart">
+                                <a asp-controller="ShoppingCart" asp-action="Index" class="cart_bt" data-toggle="dropdown">
+                                    <strong>@cartItemCount</strong>
+                                </a>
+                                <div class="dropdown-menu">
+                                    <div class="total_drop">
+                                        <div class="clearfix"><strong>Total</strong><span>$200.00</span></div>
+                                        <a href="@Url.Action("Index", "ShoppingCart")" class="btn_1 outline">View Cart</a>
+                                        <a href="checkout.html" class="btn_1">Checkout</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="#0" class="wishlist"><span>Wishlist</span></a>
+                        </li>
+                        <li>
+                            <div class="dropdown dropdown-access">
+                                <a href="/Identity/Account/Login" class="access_link" data-toggle="dropdown"><span>Account</span></a>
+                                <div class="dropdown-menu">
+                                    <ul>
+                                        <partial name="_LoginPartial" />
+                                        <li>
+                                            <a href="track-order.html"><i class="ti-truck"></i>Track your Order</a>
+                                        </li>
+                                        <li>
+                                            <a href="@Url.Action("Index", "Order")" class="ti-package"></>My Orders</a>
+                                        </li>
+                                        <li>
+                                            <a href="account.html"><i class="ti-user"></i>My Profile</a>
+                                        </li>
+                                        <li>
+                                            <a href="help.html"><i class="ti-help-alt"></i>Help and Faq</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- /row -->
+        </div>
+    </div>
+    <!-- /main_header -->
+    <!-- Tìm kiếm -->
+    <div class="main_nav mm-sticky">
+        <div class="container">
+            <div class="row small-gutters justify-content-center">
+                <div class="custom-search-input col-xl-9 col-lg-9 mb-3">
+                    <input type="text" id="search-box" placeholder="Bạn cần tìm gì?">
+                    <i class="header-icon_search_custom search-icon"></i>
+                    <i class="header-icon_clear_custom clear-icon" id="clear-search-box" style="display:none;">&#10006;</i>
+                    <div id="suggestions" class="suggestions-box"></div>
+                </div>
+            </div>
+            <!-- Lọc sản phẩm theo Category -->
+            <div class="row small-gutters mt-2 justify-content-center">
+                <nav class="categories menu col-12">
+                    <ul class="clearfix d-flex justify-content-center">
+                        <li>
+                            <a asp-controller="Product" asp-action="Index" asp-route-category="Điện thoại">
+                                <i class="fas fa-mobile-alt"></i> Điện thoại
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="Product" asp-action="Index" asp-route-category="Laptop">
+                                <i class="fas fa-laptop"></i> Laptop
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="Product" asp-action="Index" asp-route-category="Âm thanh">
+                                <i class="fas fa-tablet-alt"></i> Âm thanh
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="Product" asp-action="Index" asp-route-category="PhuKien">
+                                <i class="fas fa-headphones-alt"></i> Phụ kiện
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="Product" asp-action="Index" asp-route-category="Smartwatch">
+                                <i class="fas fa-watch"></i> Smartwatch
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="Product" asp-action="Index" asp-route-category="DongHo">
+                                <i class="fas fa-clock"></i> Đồng hồ
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="Product" asp-action="Index" asp-route-category="MayCu">
+                                <i class="fas fa-mobile"></i> Máy cũ
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="Product" asp-action="Index" asp-route-category="PC">
+                                <i class="fas fa-desktop"></i> PC
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="Product" asp-action="Index" asp-route-category="SimTheCao">
+                                <i class="fas fa-sim-card"></i> Sim, Thẻ cào
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="Product" asp-action="Index" asp-route-category="DichVuTienIch">
+                                <i class="fas fa-concierge-bell"></i> Dịch vụ tiện ích
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <!-- /main_nav -->
+</header>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#search-box').on('input', function () {
+            var keyword = $(this).val();
+            if (keyword.length > 0) {
+                $('#clear-search-box').show();
+            } else {
+                $('#clear-search-box').hide();
+            }
+
+            if (keyword.length > 2) {
+                $.ajax({
+                    url: '/Product/SearchSuggestions',
+                    method: 'GET',
+                    data: { keyword: keyword },
+                    success: function (data) {
+                        $('#suggestions').empty();
+                        data.forEach(function (product) {
+                            $('#suggestions').append(
+                                `<a href="/Product/Details/${product.id}" class="suggestion-item">
+                                                <img src="${product.imageUrl}" alt="${product.productName}">
+                                                <div>
+                                                    <span>${product.productName}</span>
+                                                    <span class="price">${product.price}</span>
+                                                    <span class="old-price">${product.oldPrice}</span>
+                                                </div>
+                                            </a>`
+                            );
+                        });
+                    }
+                });
+            } else {
+                $('#suggestions').empty();
+            }
+        });
+
+        $('#clear-search-box').on('click', function () {
+            $('#search-box').val('');
+            $('#clear-search-box').hide();
+            $('#suggestions').empty();
+        });
+
+        // Sự kiện click vào document
+        $(document).on('click', function (event) {
+            // Kiểm tra nếu click ra ngoài vùng tìm kiếm và danh sách gợi ý
+            if (!$(event.target).closest('.custom-search-input').length) {
+                $('#search-box').val(''); // Xóa nội dung trong ô tìm kiếm
+                $('#clear-search-box').hide(); // Ẩn nút xóa
+                $('#suggestions').empty(); // Ẩn danh sách gợi ý
+            }
+        });
+
+        // Ngăn chặn sự kiện click trên ô tìm kiếm và danh sách gợi ý
+        $('.custom-search-input').on('click', function (event) {
+            event.stopPropagation();
+        });
+    });
+</script>
+
+<style>
+    .main_header {
+        background: #FFD700;
+    }
+
+    .main-menu ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+    }
+
+        .main-menu ul li {
+            margin: 0 15px;
+        }
+
+            .main-menu ul li a {
+                text-decoration: none;
+                color: black;
+                font-weight: bold;
+            }
+
+                .main-menu ul li a:hover {
+                    color: #FF4500;
+                }
+
+    .categories.menu ul {
+        list-style: none; /* Loại bỏ ký hiệu đầu dòng */
+        margin: 0; /* Loại bỏ khoảng cách mặc định */
+        padding: 0; /* Loại bỏ khoảng cách mặc định */
+    }
+
+        .categories.menu ul li {
+            display: inline-block; /* Hiển thị các mục danh mục theo hàng ngang */
+            margin: 0 15px; /* Khoảng cách giữa các mục */
+        }
+
+            .categories.menu ul li a {
+                text-decoration: none; /* Loại bỏ gạch chân */
+                color: black; /* Màu chữ đen */
+                font-weight: bold; /* Chữ đậm */
+                display: flex; /* Sử dụng flexbox để căn chỉnh */
+                align-items: center; /* Căn giữa theo chiều dọc */
+            }
+
+                .categories.menu ul li a i {
+                    margin-right: 5px; /* Khoảng cách giữa biểu tượng và chữ */
+                }
+
+                .categories.menu ul li a:hover {
+                    color: #FF4500; /* Màu chữ khi di chuột qua */
+                }
+
+    .custom-search-input {
+        position: relative;
+        border: none;
+        max-width: 600px; /* Giới hạn chiều rộng của ô tìm kiếm */
+        margin: 0 auto; /* Căn giữa ô tìm kiếm */
+    }
+
+    #search-box {
+        width: 100%;
+        padding: 10px 40px 10px 30px; /* Chỉnh padding để có khoảng trống cho các icon */
+        font-size: 16px;
+    }
+
+    .search-icon {
+        position: absolute;
+        top: 50%;
+        left: 10px;
+        transform: translateY(-50%);
+        font-size: 20px;
+        color: #ccc;
+    }
+
+    .clear-icon {
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        font-size: 20px;
+        color: #ccc;
+        cursor: pointer;
+    }
+
+    .suggestions-box {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: white;
+        border: 1px solid #ccc;
+        max-height: 300px;
+        overflow-y: auto;
+        z-index: 1000;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .suggestion-item {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+        text-decoration: none;
+        color: inherit;
+    }
+
+        .suggestion-item img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            margin-right: 10px;
+        }
+
+        .suggestion-item div {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .suggestion-item .price {
+            color: red;
+        }
+
+        .suggestion-item .old-price {
+            text-decoration: line-through;
+            color: #999;
+        }
+
+    .top_tools {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        align-items: center;
+    }
+
+        .top_tools li {
+            margin-left: 20px;
+        }
+
+        .top_tools .dropdown-menu {
+            padding: 20px;
+            width: 300px;
+        }
+</style>

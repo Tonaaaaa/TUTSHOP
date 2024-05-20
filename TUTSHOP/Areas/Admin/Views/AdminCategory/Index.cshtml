@@ -1,0 +1,143 @@
+﻿@model X.PagedList.IPagedList<TUTSHOP.Models.Entities.Category>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "_AdminLayout";
+}
+
+<div class="modal fade" id="deleteCategoryModal" tabindex="-1" aria-labelledby="deleteCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteCategoryModalLabel">Xác nhận xóa danh mục</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Bạn có chắc chắn muốn xóa danh mục này?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <form id="deleteForm" asp-action="DeleteConfirmed" method="post">
+                    <input type="hidden" id="categoryId" name="id" />
+                    <button type="submit" class="btn btn-danger">Xóa</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb breadcrumb-style1">
+        <li class="breadcrumb-item">
+            <a asp-area="Admin" asp-controller="AdminHome" asp-action="Index">Trang chủ</a>
+        </li>
+        <li class="breadcrumb-item active">Danh sách danh mục - trang @Model.PageNumber</li>
+    </ol>
+</nav>
+
+<div class="row justify-content-center my-3">
+    <div class="col-lg-6">
+        <input type="text" id="searchInput" class="form-control" placeholder="Nhập từ khóa tìm kiếm">
+    </div>
+    <div class="col-lg-6 text-end">
+        <a asp-area="Admin" asp-action="Create" class="btn btn-primary">Tạo mới danh mục</a>
+    </div>
+</div>
+
+
+<div class="card">
+    <div class="table-responsive">
+
+        <table class="table" id="categoryTable">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Tên danh mục</th>
+                    <th scope="col">Hiển thị</th>
+                    <th scope="col">#</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    var idCounter = (Model.PageNumber - 1) * Model.PageSize + 1;
+                }
+                @foreach (var item in Model)
+                {
+                    <tr class="category-row">
+                        <td>@idCounter</td>
+                        <td>
+                            <p class="mb-1">@item.CategoryName</p>
+                        </td>
+                        <td>
+                            @if (item.Display == true)
+                            {
+                                <div class="d-flex align-items-center">
+                                    <div class="text-success">Public</div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="d-flex align-items-center">
+                                    <div class="text-danger">Non-public</div>
+                                </div>
+                            }
+                        </td>
+                        <td class="border-bottom-0">
+                            <div class="dropdown">
+                                <button type="button" class="btn border-0 p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                    <i class="bx bx-dots-vertical-rounded"></i>
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" asp-action="Edit" asp-route-id="@item.CategoryId"><i class="bx bx-edit-alt me-1"></i> Edit</a>
+                                    <button type="button" class="dropdown-item deleteButton" data-category-id="@item.CategoryId" data-bs-toggle="modal" data-bs-target="#deleteCategoryModal"><i class="bx bx-trash me-1"></i>Delete</button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    idCounter++;
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page }),
+                 new PagedListRenderOptions
+        {
+            LiElementClasses = new[] { "page-item" },
+            PageClasses = new[] { "page-link" },
+            UlElementClasses = new[] { "pagination" },
+            ContainerDivClasses = new[] { "pager" },
+            DisplayEllipsesWhenNotShowingAllPageNumbers = false,
+            LinkToPreviousPageFormat = "Previous", // Đặt chữ "Previous" cho nút chuyển trang trước đó
+            LinkToNextPageFormat = "Next" // Đặt chữ "Next" cho nút chuyển trang tiếp theo
+        })
+    </ul>
+</nav>
+
+
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            $('#searchInput').on('input', function () {
+                var keyword = $(this).val().toLowerCase();
+                $('.category-row').each(function () {
+                    var categoryData = $(this).text().toLowerCase(); // Lấy toàn bộ dữ liệu của mỗi hàng và chuyển đổi thành chữ thường
+                    if (categoryData.includes(keyword)) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+            });
+
+            $('.deleteButton').on('click', function () {
+                var categoryId = $(this).data('category-id');
+                $('#categoryId').val(categoryId);
+            });
+        });
+    </script>
+}

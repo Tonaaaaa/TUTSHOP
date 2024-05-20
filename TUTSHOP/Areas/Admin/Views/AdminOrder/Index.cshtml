@@ -1,0 +1,62 @@
+﻿@model IEnumerable<TUTSHOP.Models.Entities.Order>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    int Quantity = 1;
+}
+
+<h1>Quản lý đơn hàng</h1>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb breadcrumb-style1">
+        <li class="breadcrumb-item">
+            <a asp-area="Admin" asp-controller="Home" asp-action="Index">Trang chủ</a>
+        </li>
+        <li class="breadcrumb-item active">Danh sách đơn hàng - trang @ViewBag.CurrentPage</li>
+    </ol>
+</nav>
+<div class="container">
+    <div class="mx-3">
+        <p>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Mã đơn hàng</th>
+                        <th>Ngày đặt hàng</th>
+                        <th>Mã khách hàng</th>
+                        <th>Ghi chú</th>
+                        <th>Địa chỉ</th>
+                        <th>Tổng tiền</th>
+                        <th> Phương thức thanh toán</th>
+                        @* <th>Chức năng</th> *@
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var Order in Model)
+                    {
+                        <tr>
+                            <td>@Order.Id</td>
+                            <td>@Order.OrderDate.ToShortDateString()</td>
+                            <td>@Order.UserId</td>
+                            <td>@Order.Notes</td>
+                            <td>@Order.ShippingAddress</td>
+                            <td>@Order.TotalPrice.ToString("#,##0") Vnđ</td>
+                            <td> @Order.PaymentMethod</td>
+
+
+                            @* <td>
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <a href="@Url.Action("Details", "Order", new { OrderId = Order.Id })" class="btn btn-outline-secondary">Chi tiết</a>
+                                    <a href="@Url.Action("Delete", "Order", new { OrderId = Order.Id })" class="btn btn-outline-secondary">Xoá</a>
+                                }
+                                
+                            </td> *@
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+    </div>
+</div>

@@ -1,0 +1,27 @@
+﻿@model TUTSHOP.Models.Entities.Order
+
+@{
+    ViewData["Title"] = "Checkout";
+}
+<form asp-action="Checkout" method="post">
+    <div class="form-group">
+        <label asp-for="ShippingAddress">Địa chỉ nhận hàng</label>
+        <input asp-for="ShippingAddress" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Notes">Ghi chú</label>
+        <textarea asp-for="Notes" class="form-control"></textarea>
+    </div>
+    <div class="form-group">
+        <label for="paymentMethod">Phương thức thanh toán</label>
+        <select id="paymentMethod" name="paymentMethod" class="form-control" required>
+            <option value="cash">Thanh toán tiền mặt</option>
+            <option value="credit_card">Credit Card</option>
+            <option value="paypal">PayPal</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Place Order</button>
+</form>
+<a asp-controller="ShoppingCart" asp-action="Index">
+    <button class="btn btn-outline-dark"><i class="bi-cart-fill me-1">Quay lại</i></button>
+</a>

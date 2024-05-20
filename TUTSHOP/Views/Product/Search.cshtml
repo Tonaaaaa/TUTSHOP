@@ -1,0 +1,31 @@
+﻿@model IEnumerable<TUTSHOP.Models.Entities.Product>
+
+<h2>Kết quả tìm kiếm</h2>
+@if (Model.Any())
+{
+    <div class="product-list">
+        @foreach (var product in Model)
+        {
+            <div class="product-item">
+                <img src="@product.ImageUrl" alt="@product.ProductName">
+                <h3><a asp-action="Details" asp-route-id="@product.ProductId">@product.ProductName</a></h3>
+                <p>@product.Description</p>
+                <p class="price">
+                    <span class="current-price">@product.Price.ToString("C")</span>
+                    @if (product.OldPrice > product.Price)
+                    {
+                        <span class="old-price">@product.OldPrice.ToString("C")</span>
+                    }
+                </p>
+                <div class="actions">
+                    <button type="button">Add to Cart</button>
+                    <button type="button">View Details</button>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <p>Không tìm thấy sản phẩm nào.</p>
+}

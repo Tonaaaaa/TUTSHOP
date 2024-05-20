@@ -1,0 +1,63 @@
+﻿@model TUTSHOP.Models.Entities.Contact
+
+<style>
+    .contact__form input[type="text"],
+    .contact__form textarea {
+        width: 100%; /* Đặt chiều rộng của các ô text là 100% */
+        box-sizing: border-box; /* Đảm bảo kích thước bao gồm cả padding và border */
+        padding: 8px; /* Đặt padding để tạo khoảng cách giữa nội dung và viền */
+        margin-bottom: 10px; /* Đặt margin bottom để tạo khoảng cách giữa các ô */
+        resize: vertical; /* Cho phép điều chỉnh kích thước theo chiều dọc cho textarea */
+    }
+
+    .contact__form button[type="submit"] {
+        width: 100%; /* Đặt chiều rộng của nút Gửi là 100% */
+    }
+</style>
+
+
+
+<!-- Contact Section Begin -->
+<section class="contact spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-md-6">
+                <div class="contact__content">
+                    <div class="contact__address">
+                        <h3>Thông tin liên hệ</h3>
+                        <ul>
+                            <li>
+                                <h6><i class="fa fa-map-marker"></i> Địa chỉ</h6>
+                                <p>159/97/37 Trần Văn Đang, Phường 11, Quận 3, TP.HCM</p>
+                            </li>
+                            <li>
+                                <h6><i class="fa fa-phone"></i> Số điện thoại</h6>
+                                <p><span>(+84) 967 425 463</span></p>
+                            </li>
+                            <li>
+                                <h6><i class="fa fa-headphones"></i> Hỗ trợ</h6>
+                                <p>lephuonguyen21082003@gmail.com</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="contact__form">
+                        <h3>GỬI LỜI NHẮN</h3>
+                        <form asp-controller="Contact" asp-action="Index">
+                            <input asp-for="ContactName" type="text" placeholder="Tên">
+                            <input asp-for="Mail" type="text" placeholder="Email">
+                            <input asp-for="Phone" type="text" placeholder="Số điện thoại">
+                            <textarea asp-for="Message" placeholder="Lời nhắn"></textarea>
+                            <button type="submit" class="btn btn-primary">Gửi lời nhắn</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6">
+                <div class="contact__map">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d979.834625689711!2d106.6731538!3d10.7853651!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752ed5d60ac49b%3A0xce2a5fafe5d9367a!2zSOG6u20gMTU5IFRy4bqnbiBWxINuIMSQYW5nLCBwaMaw4budbmcgMTEsIFF14bqtbiAzLCBUaMOgbmggcGjhu5EgSOG7kyBDaMOtIE1pbmgsIFZp4buHdCBOYW0!5e0!3m2!1svi!2s!4v1715611387241!5m2!1svi!2s" width="500" height="780" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Contact Section End -->
