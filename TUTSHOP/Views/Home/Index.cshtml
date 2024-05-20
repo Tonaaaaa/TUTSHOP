@@ -1,0 +1,284 @@
+﻿@model IEnumerable<TUTSHOP.Models.Entities.Product>
+
+@{
+    ViewData["Title"] = "Home Page";
+    int numOfQuantity = 1;
+}
+
+<main>
+    <div id="carousel-home">
+        <div class="owl-carousel owl-theme owl-loaded owl-drag">
+            <div class="owl-stage-outer">
+                <div class="owl-stage" style="transform: translate3d(-2932px, 0px, 0px); transition: all 0s ease 0s; width: 10265px;">
+                    <div class="owl-item active" style="width: 1466.4px;">
+                        <div class="owl-slide cover" style="background-image: url(images/iphone-15-17390-sliding.webp); object-fit:fill; width:100%">
+                            <div class="opacity-mask d-flex align-items-center" data-opacity-mask="rgba(0, 0, 0, 0.5)" style="background-color: rgba(0, 0, 0, 0.5);">
+                                <div class="container">
+                                    <div class="row justify-content-center justify-content-md-end">
+                                        <div class="col-lg-6 static">
+                                            <div class="slide-text text-end white">
+                                                <h2 class="owl-slide-animated owl-slide-title is-transitioned">Tên Sản Phẩm</h2>
+                                                <p class="owl-slide-animated owl-slide-subtitle is-transitioned">Limited items available at this price</p>
+                                                <div class="owl-slide-animated owl-slide-cta is-transitioned">
+                                                    <a class="btn_1" href="listing-grid-1-full.html" role="button">Shop Now</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Add more slides here if needed -->
+                </div>
+            </div>
+        </div>
+        <div id="icon_drag_mobile"></div>
+    </div>
+    <!--/carousel-->
+
+    <ul id="banners_grid" class="clearfix">
+        <li>
+            <a href="#0" class="img_container">
+                <img src="~/images/laptopcolleciton.jpg" alt="Laptop Collection" class="lazy loaded" style="object-fit: fill">
+                <div class="short_info opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.5)" style="background-color: rgba(0, 0, 0, 0.5);">
+                    <h3>Laptop Collection</h3>
+                    <div><span class="btn_1">Shop Now</span></div>
+                </div>
+            </a>
+        </li>
+        <li>
+            <a href="#0" class="img_container">
+                <img src="~/images/iphonecollection.jpg" alt="Phone Collection" class="lazy loaded">
+                <div class="short_info opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.5)" style="background-color: rgba(0, 0, 0, 0.5);">
+                    <h3>Phone Collection</h3>
+                    <div><span class="btn_1">Shop Now</span></div>
+                </div>
+            </a>
+        </li>
+        <li>
+            <a href="#0" class="img_container">
+                <img src="~/images/accessorycollection.jpg" alt="Accessory Collection" class="lazy loaded">
+                <div class="short_info opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.5)" style="background-color: rgba(0, 0, 0, 0.5);">
+                    <h3>Accessory Collection</h3>
+                    <div><span class="btn_1">Shop Now</span></div>
+                </div>
+            </a>
+        </li>
+    </ul>
+
+    <div class="container margin_60_35">
+        <div class="main_title">
+            <h2>Top Selling</h2>
+            <span>Products</span>
+        </div>
+        <div class="row small-gutters">
+            @foreach (var item in Model)
+            {
+                if (item.HotSeller)
+                {
+                    <div class="col-6 col-md-4 col-xl-3">
+                        <div class="grid_item">
+                            <figure>
+                                <span class="ribbon off">-@item.DiscountId%</span>
+                                <a asp-controller="Product" asp-action="Details" asp-route-id="@item.ProductId">
+                                    <img class="img-fluid lazy loaded" src="@item.ImageUrl" alt="" width="200" height="200">
+                                </a>
+                            </figure>
+                            <div class="rating">
+                                <i class="icon-star voted"></i>
+                                <i class="icon-star voted"></i>
+                                <i class="icon-star voted"></i>
+                                <i class="icon-star voted"></i>
+                                <i class="icon-star"></i>
+                            </div>
+                            <a href="product-detail-1.html">
+                                <h3>@item.ProductName</h3>
+                            </a>
+                            <div class="price_box">
+                                <span class="new_price">@item.Price</span>
+                                <span class="old_price">@item.OldPrice</span>
+                            </div>
+                            <ul>
+                                <li>
+                                    <a href="#0" class="tooltip-1" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-original-title="Add to favorites">
+                                        <i class="ti-heart"></i><span>Add to favorites</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#0" class="tooltip-1" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-original-title="Add to compare">
+                                        <i class="ti-control-shuffle"></i><span>Add to compare</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#0" class="tooltip-1" data-action="AddToCart" data-productid="@item.ProductId" data-quantity="@numOfQuantity">
+                                        <i class="ti-shopping-cart"></i><span>Add to cart</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+    <!-- /container -->
+
+    <div class="featured lazy" data-bg="url(images/featured_home.jpg)">
+        <div class="opacity-mask d-flex align-items-center" data-opacity-mask="rgba(0, 0, 0, 0.5)" style="background-color: rgba(0, 0, 0, 0.5);">
+            <div class="container margin_60">
+                <div class="row justify-content-center justify-content-md-start">
+                    <div class="col-lg-6 wow" data-wow-offset="150" style="visibility: hidden; animation-name: none;">
+                        <h3>Iphone 14 ProMax</h3>
+                        <p>Lightweight cushioning and durable support with a Phylon midsole</p>
+                        <div class="feat_text_block">
+                            <div class="price_box">
+                                <span class="new_price">$90.00</span>
+                                <span class="old_price">$170.00</span>
+                            </div>
+                            <a class="btn_1" href="listing-grid-1-full.html" role="button">Shop Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /featured -->
+
+    <div class="container margin_60_35">
+        <div class="main_title">
+            <h2>Featured</h2>
+            <span>Products</span>
+            <p>Cum doctus civibus efficiantur in imperdiet deterruisset</p>
+        </div>
+        <div class="owl-carousel owl-theme products_carousel owl-loaded owl-drag">
+            <div class="owl-stage-outer">
+                <div class="owl-stage">
+                    @foreach (var item in Model)
+                    {
+                        if (item.Display)
+                        {
+                            <div class="owl-item active" style="width: 290px; margin-right: 10px;">
+                                <div class="item">
+                                    <div class="grid_item">
+                                        <span class="ribbon new">New</span>
+                                        <figure>
+                                            <a href="product-detail-1.html">
+                                                <img class="owl-lazy img-fluid" data-src="@item.ImageUrl" alt="" width="100" height="100">
+                                            </a>
+                                        </figure>
+                                        <div class="rating">
+                                            <i class="icon-star voted"></i>
+                                            <i class="icon-star voted"></i>
+                                            <i class="icon-star voted"></i>
+                                            <i class="icon-star voted"></i>
+                                            <i class="icon-star"></i>
+                                        </div>
+                                        <a href="product-detail-1.html">
+                                            <h3>@item.ProductName</h3>
+                                        </a>
+                                        <div class="price_box">
+                                            <span class="new_price">@item.Price</span>
+                                        </div>
+                                        <ul>
+                                            <li>
+                                                <a href="#0" class="tooltip-1" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-original-title="Add to favorites">
+                                                    <i class="ti-heart"></i><span>Add to favorites</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#0" class="tooltip-1" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-original-title="Add to compare">
+                                                    <i class="ti-control-shuffle"></i><span>Add to compare</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#0" class="tooltip-1" data-action="AddToCart" data-productid="@item.ProductId" data-quantity="@numOfQuantity">
+                                                    <i class="ti-shopping-cart"></i><span>Add to cart</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <!-- /grid_item -->
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+            <div class="owl-nav">
+                <button type="button" role="presentation" class="owl-prev disabled"><i class="ti-angle-left"></i></button>
+                <button type="button" role="presentation" class="owl-next"><i class="ti-angle-right"></i></button>
+            </div>
+            <div class="owl-dots disabled"></div>
+        </div>
+        <!-- /products_carousel -->
+    </div>
+
+    <style>
+        .modal-content.bg-success {
+            background-color: #28a745;
+            border: none;
+            border-radius: 50px;
+        }
+
+            .modal-content.bg-success .fa-check-circle {
+                font-size: 24px;
+                margin-bottom: 10px;
+            }
+    </style>
+
+    @section Scripts {
+        <script>
+            $(document).ready(function () {
+                $('a[data-action="AddToCart"]').on('click', function (event) {
+                       event.preventDefault();
+                       var productId = $(this).data('productid');
+                          var quantity = $(this).data('quantity');
+
+                          $.ajax({
+                              url: '@Url.Action("AddToCart", "ShoppingCart")',
+                           type: 'POST',
+                           data: { productId: productId, quantity: quantity },
+                           success: function (response) {
+                            $('.dropdown-cart .cart_bt strong').text(response.cartItemCount);
+
+                            // Show success modal
+                            $('#successModal').modal('show');
+
+                               // Hide modal after 2 seconds
+                               setTimeout(function () {
+                                   $('#successModal').modal('hide');
+                            }, 2000);
+                         }
+                     });
+                 });
+
+                 // Format prices
+                 function formatPrice(price) {
+                     return price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND', minimumFractionDigits: 0, maximumFractionDigits: 0 }).replace("₫", "") + " đ";
+                 }
+
+                 $('.new_price, .old_price').each(function () {
+                     var price = parseFloat($(this).text().replace(/[^0-9.-]+/g, ""));
+                     $(this).text(formatPrice(price));
+                 });
+             });
+        </script>
+    }
+</main>
+
+@Html.Partial("_BlogPartial")
+@Html.Partial("_FooterPartial")
+
+<!-- Success Modal -->
+<div id="successModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+        <div class="modal-content bg-success text-white w-100 rounded">
+            <div class="modal-body text-center">
+                <i class="fa fa-check-circle"></i>
+                <p>Thêm vào giỏ hàng thành công</p>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /container -->

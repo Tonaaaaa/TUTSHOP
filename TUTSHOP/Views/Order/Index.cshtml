@@ -1,0 +1,53 @@
+﻿@model IEnumerable<TUTSHOP.Models.Entities.Order>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Đặt hàng</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Mã đơn hàng</th>
+            <th>Ngày đặt hàng</th>
+            <th>Mã khách hàng</th>
+            <th>Ghi chú</th>
+            <th>Địa chỉ</th>
+            <th>Tổng tiền</th>
+            <th>Phương thức thanh toán</th>
+            @* <th>Chức năng</th> *@
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var Order in Model)
+        {
+            <tr>
+                <td>@Order.Id</td>
+                <td>@Order.OrderDate.ToShortDateString()</td>
+                <td>@Order.UserId</td>
+                <td>@Order.Notes</td>
+                <td>@Order.ShippingAddress</td>
+
+                <td>@Order.TotalPrice.ToString("#,##0") Vnđ</td>
+                <td>@Order.PaymentMethod</td>
+                
+                @* <td>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a href="@Url.Action("Details", "Order", new { OrderId = Order.Id })" class="btn btn-primary">Chi tiết</a>
+                        <a href="@Url.Action("Delete", "Order", new { OrderId = Order.Id })" class="btn btn-danger">Xoá</a>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("Cancel", "Order", new { OrderId = Order.Id })" class="btn btn-warning">Cancel</a>
+                    }
+                </td> *@
+            </tr>
+        }
+    </tbody>
+
+</table>
+
+<a asp-action="Index" asp-controller="Home">Quay về trang chủ</a>

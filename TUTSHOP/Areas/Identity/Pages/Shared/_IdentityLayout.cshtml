@@ -1,0 +1,29 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TUT-SHOP</title>
+    <link rel="shortcut icon" type="image/png" href="~/AdminAssets/images/logos/favicon.png" />
+    <link rel="stylesheet" href="~/AdminAssets/css/styles.min.css" />
+</head>
+
+<body>
+    <!--  Body Wrapper -->
+    <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+         data-sidebar-position="fixed" data-header-position="fixed">
+        <div class="position-relative overflow-hidden radial-gradient min-vh-100 d-flex align-items-center justify-content-center">
+            <div class="d-flex align-items-center justify-content-center w-100">
+                @RenderBody()
+
+            </div>
+        </div>
+    </div>
+    <script src="~/AdminAssets/libs/jquery/dist/jquery.min.js"></script>
+    <script src="~/AdminAssets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html>

@@ -1,0 +1,30 @@
+﻿@model TUTSHOP.Models.Entities.Order
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+<div>
+    <h1>Chi tiết sản phẩm</h1>
+    <h2>đơn hàng @Model.Id</h2>
+
+    <div>
+		<p>Tên khách hàng:@Model.ApplicationUser.UserName</p>
+		<p><b>Ngày đặt hàng:</b> @Model.OrderDate</p>
+        <p><b>Địa chỉ giao hàng:</b> @Model.ShippingAddress</p>
+        <p><b>Tổng tiền:</b>@Model.TotalPrice</p>
+        <p><b>Ghi chú:</b> @Model.Notes</p>
+         
+
+        <p><b>Phương thức thanh toán:</b>@Model.PaymentMethod</p>
+
+        <hr />
+
+    </div>
+    <div>
+
+        <a asp-action="Index" asp-controller="Home">Quay về trang chủ</a>
+    </div>
+
+   
+

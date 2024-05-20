@@ -1,0 +1,28 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using TUTSHOP.Models.Entities
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+
+    <a id="manage" class="" asp-area="Identity" asp-page="/Account/Manage/Index" title="Quản lý" style="color: white;">Hello @UserManager.GetUserName(User)!</a>
+
+    <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post" id="logoutForm" class="navbar-right">
+        <ul class="nav navbar-nav navbar-right">
+            
+            <li>
+                <a class="" id="logout" asp-area="Identity" asp-page="/Account/Login">Logout</a>
+                  
+            </li>
+        </ul>
+    </form>
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li><a class="bi bi-person-fill-add" id="register" asp-area="Identity" asp-page="/Account/Register">Register</a></li>
+        <li><a class="bi bi-person-circle" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a></li>
+    </ul>
+}

@@ -1,0 +1,115 @@
+﻿@using TUTSHOP.Models.Entities
+@model IEnumerable<TUTSHOP.Models.Entities.DiscountCode>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "_AdminLayout";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb breadcrumb-style1">
+        <li class="breadcrumb-item">
+            <a asp-area="Admin" asp-controller="AdminHome" asp-action="Index">Trang chủ</a>
+        </li>
+        <li class="breadcrumb-item active">Danh sách danh mục - trang @ViewBag.CurrentPage</li>
+    </ol>
+</nav>
+
+<div class="m-2 d-flex justify-content-end m-3 ">
+    <div class="align-items-center">
+        <a class="btn btn-primary btn-tone" asp-controller="AdminDiscountID" asp-action="Create">Tạo mới</a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="table-responsive">
+        <table class="table">
+
+       
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Quantity)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Code)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DiscountAmount)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Type)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Condition)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.StartDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.EndDate)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if(Model != null)
+            {
+                foreach(var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Quantity)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Code)
+                        </td>
+                        <td>
+                            @if (item.Type == DiscountType.Percentage)
+                            {
+                                @item.DiscountAmount.ToString("0") <text>%</text>
+                            }
+                            else
+                            {
+                                @if (item.Type == DiscountType.FixedAmount || item.Type == DiscountType.FreeShipping)
+                                {
+                                    @string.Format("{0:N0}", item.DiscountAmount) <text>VND</text>
+                                }
+                                else
+                                {
+                                    @Html.DisplayFor(modelItem => item.DiscountAmount)
+                                }
+                            }
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Type)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Condition)
+                        </td>
+                        <td>
+                            @item.StartDate.ToString("dd/MM/yyyy")
+                        </td>
+                        <td>
+                            @item.EndDate.ToString("dd/MM/yyyy")
+                        </td>
+                        <td class="border-bottom-0">
+                            <div class="dropdown">
+                                <button type="button" class="btn border-0 p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                    <i class="bx bx-dots-vertical-rounded"></i>
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" asp-action="Edit" asp-route-id="@item.DiscountCodeId"><i class="bx bx-edit-alt me-1"></i> Edit</a>
+                                    <form asp-action="DeleteConfirmed" asp-route-id="@item.DiscountCodeId">
+                                        <button type="submit" class="btn dropdown-item"><i class="bx bx-trash me-1"></i>Delete</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+        </table>
+    </div>
+</div>

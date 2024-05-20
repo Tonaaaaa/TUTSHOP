@@ -1,0 +1,27 @@
+﻿@model TUTSHOP.Models.Entities.ShoppingCart
+
+<div class="dropdown-menu">
+    @if (Model.Items.Any())
+    {
+        <div class="total_drop">
+            <ul>
+                @foreach (var item in Model.Items)
+                {
+                    <li>
+                        <a href="@Url.Action("Details", "Product", new { id = item.ProductId })">
+                            <img src="@item.ImageUrl" alt="@item.Name" width="50" height="50">
+                            <strong>@item.Name</strong> <span>@item.Price.ToString("N0")đ x @item.Quantity</span>
+                        </a>
+                    </li>
+                }
+            </ul>
+            <div class="clearfix"><strong>Total</strong><span>@Model.Items.Sum(i => i.Price * i.Quantity).ToString("N0")đ</span></div>
+            <a href="@Url.Action("Index", "ShoppingCart")" class="btn_1 outline">View Cart</a>
+            <a href="@Url.Action("Checkout", "ShoppingCart")" class="btn_1">Checkout</a>
+        </div>
+    }
+    else
+    {
+        <p>Your cart is empty!</p>
+    }
+</div>

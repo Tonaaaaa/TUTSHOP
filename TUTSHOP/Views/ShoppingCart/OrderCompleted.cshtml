@@ -1,0 +1,62 @@
+﻿@model TUTSHOP.Models.Entities.Order
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="order-confirmation">
+                <h2>Đặt hàng thành công!</h2>
+@*                 <p>Bạn đã đặt hàng thành công.</p>
+                <p>Chúng tôi đã gửi email xác nhận đơn hàng tới <strong>@Model.ApplicationUser.Email</strong>. Vui lòng kiểm tra hộp thư và làm theo hướng dẫn để xác nhận đơn hàng.</p> *@
+                <div class="order-details">
+                    <p><strong>Mã Đơn Hàng:</strong> @Model.Id</p>
+                    <p><strong>Người Nhận:</strong> @Model.ApplicationUser.FullName</p>
+                    <p><strong>Số Điện Thoại:</strong> @Model.ApplicationUser.PhoneNumber</p>
+                    <p><strong>Nhận Sản Phẩm Tại:</strong> @Model.ShippingAddress</p>
+                    <p><strong>Hình Thức Thanh Toán:</strong> @Model.PaymentMethod</p>
+                    <p><strong>Tổng Tiền:</strong> @Model.TotalPrice.ToString("#,##0") đ</p>
+                </div>
+                <a href="@Url.Action("Index", "Home")" class="btn btn-primary">Quay về trang chủ</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    h2{
+        text-align: center;
+    }
+    p{
+        font-weight:bold;
+    }
+    .order-confirmation {
+        background-color: #f8f9fa;
+        padding: 30px;
+        border-radius: 8px;
+        text-align: left; /* Thay đổi từ center sang left */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+        .order-confirmation h2 {
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        .order-confirmation p {
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+    .order-details p {
+        margin-bottom: 10px;
+        font-size: 16px;
+    }
+
+    .order-confirmation a.btn {
+        margin-top: 20px;
+        text-decoration: none;
+    }
+
+    .order-confirmation strong {
+        color: #333;
+    }
+</style>

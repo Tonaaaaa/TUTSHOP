@@ -1,0 +1,44 @@
+﻿@model IEnumerable<TUTSHOP.Models.Entities.ApplicationUser>
+
+<h2>Customer Accounts</h2>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb breadcrumb-style1">
+        <li class="breadcrumb-item">
+            <a asp-area="Admin" asp-controller="Home" asp-action="Index">Trang chủ</a>
+        </li>
+        <li class="breadcrumb-item active">Danh sách người dùng - trang @ViewBag.CurrentPage</li>
+    </ol>
+</nav>
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Họ tên </th>
+            <th>Email</th>
+            <th>Địa chỉ </th>
+            <th>Số điện thoại</th>
+            <th>#</th>
+            <!-- Thêm các cột khác nếu cần -->
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.Id</td>
+                <td>@user.FullName</td>
+                <td>@user.Email</td>
+                <td>@user.Address</td>
+                <td>@user.PhoneNumber</td>
+                <!-- Thêm các cột khác nếu cần -->
+                <td>
+                <form asp-action="Delete" asp-route-id="@user.Id" method="post">
+                    <input type="submit" value="Delete" class="btn btn-danger" />
+                    
+                </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

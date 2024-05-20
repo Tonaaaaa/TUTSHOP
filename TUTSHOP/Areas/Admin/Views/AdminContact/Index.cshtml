@@ -1,0 +1,57 @@
+﻿@model IEnumerable<TUTSHOP.Models.Entities.Contact>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb breadcrumb-style1">
+        <li class="breadcrumb-item">
+            <a asp-area="Admin" asp-controller="Home" asp-action="Index">Trang chủ</a>
+        </li>
+        <li class="breadcrumb-item active">Danh sách liên hệ - trang @ViewBag.CurrentPage</li>
+    </ol>
+</nav>
+
+<div class="card">
+    <div class="table-responsive ">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Tên khách hàng liên hệ</th>
+                    <th scope="col">Mail</th>
+                    <th scope="col">Số điện thoại</th>
+                    <th scope="col">Lời nhắn </th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null)
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.ContactId</td>
+                            <td>
+                                <p class="mb-1">@item.ContactName</p>
+                            </td>
+                            <td>
+                                @item.Mail
+
+                            </td>
+                            <td>
+                                @item.Phone
+
+                            </td>
+                            <td>
+                                <p class="mb-1">@item.Message</p>
+                            </td>
+                        </tr>
+                    }
+                }
+
+            </tbody>
+        </table>
+    </div>

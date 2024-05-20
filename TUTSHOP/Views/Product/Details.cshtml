@@ -1,0 +1,179 @@
+﻿@model TUTSHOP.Models.Entities.Product
+
+<main style="margin-bottom: 388.2px;">
+    <div class="container margin_30">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="all">
+                    <div class="slider">
+                        <div class="owl-carousel owl-theme main owl-loaded owl-drag">
+                            <div class="owl-stage-outer">
+                                <div class="owl-stage" style="transform: translate3d(0px, 0px, 0px); transition: all 0s ease 0s; width: 3498px;">
+                                    <div class="owl-item active" style="width: 583px;">
+                                        <img src="@Model.ImageUrl" class="item-box h-auto" />
+                                    </div>
+                                    <!-- Add more items here if needed -->
+                                </div>
+                            </div>
+                            <div class="owl-nav"><button type="button" role="presentation" class="owl-prev disabled"><span aria-label="Previous">‹</span></button><button type="button" role="presentation" class="owl-next"><span aria-label="Next">›</span></button></div>
+                            <div class="owl-dots"><button role="button" class="owl-dot active"><span></span></button></div>
+                        </div>
+                    </div>
+                    <div class="slider-two">
+                        <div class="owl-carousel owl-theme thumbs owl-loaded">
+                            <div class="owl-stage-outer">
+                                <div class="owl-stage" style="transform: translate3d(0px, 0px, 0px); transition: all 0s ease 0s; width: 718px;">
+                                    <div class="owl-item active" style="width: 104.6px; margin-right: 15px;">
+                                        <div style="background-image: url(img/products/shoes/1.jpg);" class="item active"></div>
+                                    </div>
+                                    <!-- Add more thumbnails here if needed -->
+                                </div>
+                            </div>
+                            <div class="owl-nav"><button type="button" role="presentation" class="owl-prev disabled"><span aria-label="Previous">‹</span></button><button type="button" role="presentation" class="owl-next"><span aria-label="Next">›</span></button></div>
+                            <div class="owl-dots"><button role="button" class="owl-dot active"><span></span></button></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="breadcrumbs">
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Category</a></li>
+                        <li>Page active</li>
+                    </ul>
+                </div>
+                <!-- /page_header -->
+                <div class="prod_info">
+                    <h1>@Html.DisplayFor(model => model.ProductName)</h1>
+                    <span class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i><em>4 reviews</em></span>
+                    <p><small>Category: @Html.DisplayFor(model => model.CategoryId)</small>@* <br>@Html.DisplayFor(model => model.Description) *@</p>
+                    <div class="prod_options">
+                        <div class="row">
+                            <label class="col-xl-5 col-lg-5 col-md-6 col-6 pt-0"><strong>Màu sắc: </strong></label>
+                            <div class="col-xl-4 col-lg-5 col-md-6 col-6 colors">
+                                <ul>
+                                    <li><a href="#0" class="color color_1 active" title="Đen"></a></li>
+                                    <li><a href="#0" class="color color_2" title="Trắng"></a></li>
+                                    <li><a href="#0" class="color color_3" title="Vàng"></a></li>
+                                    <li><a href="#0" class="color color_4" title="Xanh"></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label class="col-xl-5 col-lg-5 col-md-6 col-6"><strong>Dung lượng:</strong></label>
+                            <div class="col-xl-4 col-lg-5 col-md-6 col-6">
+                                <div class="custom-select-form">
+                                    <select class="wide">
+                                        <option value="64GB" selected>64GB</option>
+                                        <option value="128GB">128GB</option>
+                                        <option value="256GB">256GB</option>
+                                        <option value="512GB">512GB</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-5 col-md-6">
+                            <div class="price_main">
+                                <span class="new_price" id="formattedPrice">@Html.DisplayFor(model => model.Price)</span>
+                                <span class="percentage">-@Model.DiscountId%</span>
+                                <span class="old_price" id="formattedOldPrice">@Html.DisplayFor(model => model.OldPrice)</span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-6">
+                            <div class="btn_add_to_cart">
+                                <a href="#0" class="btn_1" data-action="AddToCart" data-productid="@Model.ProductId" data-quantity="1">Add to Cart</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /prod_info -->
+                    <div class="product_actions">
+                        <ul>
+                            <li>
+                                <a href="#"><i class="ti-heart"></i><span>Add to Wishlist</span></a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="ti-control-shuffle"></i><span>Add to Compare</span></a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- /product_actions -->
+                </div>
+            </div>
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+    <!-- /container -->
+
+    <div class="feat">
+        <div class="container">
+            <ul>
+                <li>
+                    <div class="box">
+                        <i class="ti-gift"></i>
+                        <div class="justify-content-center">
+                            <h3>Free Shipping</h3>
+                            <p>For all orders over $99</p>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="box">
+                        <i class="ti-wallet"></i>
+                        <div class="justify-content-center">
+                            <h3>Secure Payment</h3>
+                            <p>100% secure payment</p>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="box">
+                        <i class="ti-headphone-alt"></i>
+                        <div class="justify-content-center">
+                            <h3>24/7 Support</h3>
+                            <p>Online top support</p>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!--/feat-->
+
+</main>
+@Html.Partial("_FooterPartial")
+
+<script>
+    // Function to format price
+    function formatPrice(priceElementId) {
+        var priceElement = document.getElementById(priceElementId);
+        var price = parseFloat(priceElement.innerText); // Get the price value
+        var formattedPrice = price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }); // Format price
+        priceElement.innerText = formattedPrice; // Update the element with formatted price
+    }
+
+    // Format Price and OldPrice
+    formatPrice('formattedPrice');
+    formatPrice('formattedOldPrice');
+
+    $(document).ready(function () {
+        $('a[data-action="AddToCart"]').on('click', function (event) {
+            event.preventDefault();
+            var productId = $(this).data('productid');
+            var quantity = $(this).data('quantity');
+
+            $.ajax({
+                url: '@Url.Action("AddToCart", "ShoppingCart")',
+                type: 'POST',
+                data: { productId: productId, quantity: quantity },
+                success: function (response) {
+                    // Redirect to ShoppingCart/Index after adding to cart
+                    window.location.href = '@Url.Action("Index", "ShoppingCart")';
+                }
+            });
+        });
+    });
+</script>
