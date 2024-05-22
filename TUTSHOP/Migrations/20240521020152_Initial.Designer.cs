@@ -12,8 +12,8 @@ using TUTSHOP.Data_Access;
 namespace TUTSHOP.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240519061601_database")]
-    partial class database
+    [Migration("20240521020152_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

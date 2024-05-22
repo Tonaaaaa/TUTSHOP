@@ -48,6 +48,7 @@
                 </nav>
                 <div class="col-xl-3 col-lg-2 col-md-3">
                     <ul class="top_tools">
+                        
                         <li>
                             <div class="dropdown dropdown-cart">
                                 <a asp-controller="ShoppingCart" asp-action="Index" class="cart_bt" data-toggle="dropdown">
@@ -65,15 +66,17 @@
                         <li>
                             <a href="#0" class="wishlist"><span>Wishlist</span></a>
                         </li>
+                       
                         <li>
                             <div class="dropdown dropdown-access">
                                 <a href="/Identity/Account/Login" class="access_link" data-toggle="dropdown"><span>Account</span></a>
                                 <div class="dropdown-menu">
                                     <ul>
-                                        <partial name="_LoginPartial" />
-                                        <li>
-                                            <a href="track-order.html"><i class="ti-truck"></i>Track your Order</a>
-                                        </li>
+                                        @* <partial name="_LoginPartial" /> *@
+                                        @* <li>
+                                            <a asp-controller="AdminHome" asp-area="Admin"><i class="ti-truck"></i>Admin</a>
+                                        </li> *@
+                                        
                                         <li>
                                             <a href="@Url.Action("Index", "Order")" class="ti-package"></>My Orders</a>
                                         </li>
@@ -81,12 +84,14 @@
                                             <a href="account.html"><i class="ti-user"></i>My Profile</a>
                                         </li>
                                         <li>
-                                            <a href="help.html"><i class="ti-help-alt"></i>Help and Faq</a>
+                                            <a href="@Url.Action("Index", "Contact")"><i class="ti-help-alt"></i>Help and Faq</a>
                                         </li>
                                     </ul>
                                 </div>
                             </div>
                         </li>
+						<partial name="_LoginPartial" />
+
                     </ul>
                 </div>
             </div>
