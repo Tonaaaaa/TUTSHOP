@@ -3,25 +3,43 @@
 @{
     ViewData["Title"] = "Checkout";
 }
-<form asp-action="Checkout" method="post">
-    <div class="form-group">
-        <label asp-for="ShippingAddress">Địa chỉ nhận hàng</label>
-        <input asp-for="ShippingAddress" class="form-control" />
+<div class="container mt-5">
+    <h2 class="mb-4">@ViewData["Title"]</h2>
+    <div class="p-4 shadow-sm" style="border: none;">
+        <form asp-action="Checkout" method="post">
+            <div class="form-group mb-3">
+                <label asp-for="ShippingAddress" class="form-label">Địa chỉ nhận hàng</label>
+                <input asp-for="ShippingAddress" class="form-control" placeholder="Nhập địa chỉ của bạn" />
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="Notes" class="form-label">Ghi chú</label>
+                <textarea asp-for="Notes" class="form-control" rows="3" placeholder="Nhập ghi chú (nếu có)"></textarea>
+            </div>
+            <div class="form-group mb-4">
+                <label class="form-label">Phương thức thanh toán</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="paymentMethod" id="paymentMethod1" value="Thanh toán tiền mặt" required>
+                    <label class="form-check-label" for="paymentMethod1">
+                        Thanh toán tiền mặt
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="paymentMethod" id="paymentMethod2" value="credit_card" required>
+                    <label class="form-check-label" for="paymentMethod2">
+                        Credit Card
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="paymentMethod" id="paymentMethod3" value="paypal" required>
+                    <label class="form-check-label" for="paymentMethod3">
+                        PayPal
+                    </label>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Đặt hàng</button>
+            <a asp-controller="ShoppingCart" asp-action="Index" class="btn btn-outline-dark ms-2">
+                <i class="bi-cart-fill me-1"></i> Quay lại
+            </a>
+        </form>
     </div>
-    <div class="form-group">
-        <label asp-for="Notes">Ghi chú</label>
-        <textarea asp-for="Notes" class="form-control"></textarea>
-    </div>
-    <div class="form-group">
-        <label for="paymentMethod">Phương thức thanh toán</label>
-        <select id="paymentMethod" name="paymentMethod" class="form-control" required>
-            <option value="cash">Thanh toán tiền mặt</option>
-            <option value="credit_card">Credit Card</option>
-            <option value="paypal">PayPal</option>
-        </select>
-    </div>
-    <button type="submit" class="btn btn-primary">Place Order</button>
-</form>
-<a asp-controller="ShoppingCart" asp-action="Index">
-    <button class="btn btn-outline-dark"><i class="bi-cart-fill me-1">Quay lại</i></button>
-</a>
+</div>

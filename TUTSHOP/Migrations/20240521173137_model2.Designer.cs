@@ -12,8 +12,8 @@ using TUTSHOP.Data_Access;
 namespace TUTSHOP.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240519061601_database")]
-    partial class database
+    [Migration("20240521173137_model2")]
+    partial class model2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -336,6 +336,9 @@ namespace TUTSHOP.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<bool>("IsApproved")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Notes")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -394,7 +397,7 @@ namespace TUTSHOP.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderDetail");
+                    b.ToTable("OrderDetails");
                 });
 
             modelBuilder.Entity("TUTSHOP.Models.Entities.Product", b =>

@@ -6,6 +6,9 @@ using TUTSHOP.Models.Entities;
 using TUTSHOP.Models.Repositories;
 using System.Linq;
 using System.Threading.Tasks;
+using System;
+using System.Collections.Generic;
+using Microsoft.CodeAnalysis;
 
 namespace TUTSHOP.Controllers
 {
@@ -51,7 +54,7 @@ namespace TUTSHOP.Controllers
             {
                 ProductId = i.ProductId,
                 Quantity = i.Quantity,
-                Price = i.Price,
+                Price = i.Price, // Giá của một sản phẩm
                 Product = _context.Products.Find(i.ProductId)
             }).ToList();
             order.PaymentMethod = paymentMethod;
@@ -63,7 +66,6 @@ namespace TUTSHOP.Controllers
 
             return View("OrderCompleted", order);
         }
-
         [HttpPost]
         public async Task<IActionResult> AddToCart(int productId, int quantity)
         {
@@ -85,17 +87,14 @@ namespace TUTSHOP.Controllers
         }
 
         [HttpPost]
-        public IActionResult UpdateCart(Dictionary<int, int> quantities)
+        public IActionResult UpdateCart(int productId, int quantity)
         {
             var cart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("Cart") ?? new ShoppingCart();
 
-            foreach (var (productId, quantity) in quantities)
+            var cartItem = cart.Items.FirstOrDefault(item => item.ProductId == productId);
+            if (cartItem != null)
             {
-                var cartItem = cart.Items.FirstOrDefault(item => item.ProductId == productId);
-                if (cartItem != null)
-                {
-                    cartItem.Quantity = quantity;
-                }
+                cartItem.Quantity = quantity;
             }
 
             HttpContext.Session.SetObjectAsJson("Cart", cart);

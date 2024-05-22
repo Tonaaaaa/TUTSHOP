@@ -96,6 +96,23 @@
                                 <span class="hide-menu">Quản lí đơn hàng</span>
                             </a>
                         </li>
+                        <li class="sidebar-item">
+                            <a asp-controller="AdminOrder" asp-action="PendingOrders" class="sidebar-link" aria-expanded="false">
+                                <span>
+                                    <i class="ti ti-alert-circle"></i>
+                                </span>
+                                <span class="hide-menu">Quản lí đơn hàng chưa duyệt</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a asp-controller="AdminOrder" asp-action="ApprovedOrders" class="sidebar-link" aria-expanded="false">
+                                <span>
+                                    <i class="ti ti-alert-circle"></i>
+                                </span>
+                                <span class="hide-menu">Quản lí đơn hàng đã duyệt</span>
+                            </a>
+                        </li>
+
 
                         <li class="nav-small-cap">
                             <i class="ti ti-dots nav-small-cap-icon fs-4"></i>

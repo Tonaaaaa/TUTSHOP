@@ -53,13 +53,13 @@
                                 <a asp-controller="ShoppingCart" asp-action="Index" class="cart_bt" data-toggle="dropdown">
                                     <strong>@cartItemCount</strong>
                                 </a>
-                                <div class="dropdown-menu">
+                                @* <div class="dropdown-menu">
                                     <div class="total_drop">
                                         <div class="clearfix"><strong>Total</strong><span>$200.00</span></div>
                                         <a href="@Url.Action("Index", "ShoppingCart")" class="btn_1 outline">View Cart</a>
                                         <a href="checkout.html" class="btn_1">Checkout</a>
                                     </div>
-                                </div>
+                                </div> *@
                             </div>
                         </li>
                         <li>
@@ -125,7 +125,7 @@
                             </a>
                         </li>
                         <li>
-                            <a asp-controller="Product" asp-action="Index" asp-route-category="PhuKien">
+                            <a asp-controller="Product" asp-action="Index" asp-route-category="Phụ kiện">
                                 <i class="fas fa-headphones-alt"></i> Phụ kiện
                             </a>
                         </li>
@@ -135,7 +135,7 @@
                             </a>
                         </li>
                         <li>
-                            <a asp-controller="Product" asp-action="Index" asp-route-category="DongHo">
+                            <a asp-controller="Product" asp-action="Index" asp-route-category="Đồng hồ">
                                 <i class="fas fa-clock"></i> Đồng hồ
                             </a>
                         </li>
@@ -188,6 +188,7 @@
                         data.forEach(function (product) {
                             $('#suggestions').append(
                                 `<a href="/Product/Details/${product.id}" class="suggestion-item">
+                                                
                                                 <img src="${product.imageUrl}" alt="${product.productName}">
                                                 <div>
                                                     <span>${product.productName}</span>

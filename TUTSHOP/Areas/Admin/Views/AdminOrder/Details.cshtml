@@ -1,30 +1,40 @@
 ﻿@model TUTSHOP.Models.Entities.Order
 
-@{
-    ViewData["Title"] = "Details";
-    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
-}
-<div>
-    <h1>Chi tiết sản phẩm</h1>
-    <h2>đơn hàng @Model.Id</h2>
-
-    <div>
-		<p>Tên khách hàng:@Model.ApplicationUser.UserName</p>
-		<p><b>Ngày đặt hàng:</b> @Model.OrderDate</p>
-        <p><b>Địa chỉ giao hàng:</b> @Model.ShippingAddress</p>
-        <p><b>Tổng tiền:</b>@Model.TotalPrice</p>
-        <p><b>Ghi chú:</b> @Model.Notes</p>
-         
-
-        <p><b>Phương thức thanh toán:</b>@Model.PaymentMethod</p>
-
-        <hr />
-
+<div class="container mt-4">
+    <h2>Chi tiết đơn hàng</h2>
+    <div class="row">
+        <div class="col-md-6">
+            <h4>Thông tin đơn hàng</h4>
+            <p>Mã đơn hàng: @Model.Id</p>
+            <p>Người dùng: @Model.ApplicationUser.FullName</p>
+            <p>Ngày đặt: @Model.OrderDate.ToString("dd/MM/yyyy")</p>
+            <p>Tổng tiền: @string.Format("{0:N0}", @Model.TotalPrice) đ</p>
+            <p>Địa chỉ giao hàng: @Model.ShippingAddress</p>
+            <p>Ghi chú: @Model.Notes</p>
+            <p>Phương thức thanh toán: @Model.PaymentMethod</p>
+            <p>Trạng thái đơn hàng: @Model.OrderStatus</p>
+        </div>
     </div>
-    <div>
-
-        <a asp-action="Index" asp-controller="Home">Quay về trang chủ</a>
-    </div>
-
-   
-
+    <h4>Chi tiết sản phẩm</h4>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Sản phẩm</th>
+                <th>Giá</th>
+                <th>Số lượng</th>
+                <th>Thành tiền</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.OrderDetails)
+            {
+                <tr>
+                    <td>@item.Product.ProductName</td>
+                    <td>@string.Format("{0:N0}", @item.Price / @item.Quantity) đ</td> <!-- Giá đơn lẻ -->
+                    <td>@item.Quantity</td>
+                    <td>@string.Format("{0:N0}", @item.Price) đ</td> <!-- Giá tổng cộng -->
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
