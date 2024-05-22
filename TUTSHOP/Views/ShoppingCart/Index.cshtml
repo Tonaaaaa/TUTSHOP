@@ -11,8 +11,9 @@
                         <button type="button" class="btn btn-danger btn-sm">Giỏ hàng</button>
                     </div>
                     <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <input type="checkbox" id="selectAll" /> Chọn tất cả
+                        <div class="d-flex align-items-center mb-3">
+                            <input type="checkbox" id="selectAll" class="round-checkbox" />
+                            <label id="selectAllLabel" class="ms-2">Chọn tất cả</label>
                         </div>
                         <form id="updateCartForm" asp-action="UpdateCart" method="post">
                             @foreach (var item in Model.Items)
@@ -20,8 +21,8 @@
                                 <div class="cart-item card mb-3 position-relative">
                                     <div class="card-body d-flex align-items-center justify-content-between">
                                         <div class="d-flex align-items-center">
-                                            <input type="checkbox" class="item-checkbox mr-3" data-id="@item.ProductId" data-price="@item.Price" data-quantity="@item.Quantity" />
-                                            <img src="@item.ImageUrl" alt="@item.Name" class="img-fluid" style="height: 100px; width: 100px;" />
+                                            <input type="checkbox" class="item-checkbox mr-3 round-checkbox" data-id="@item.ProductId" data-price="@item.Price" data-quantity="@item.Quantity" />
+                                            <img src="@item.ImageUrl" alt="@item.Name" class="img-fluid" style="height: 100px; width: 100px; object-fit:cover" />
                                             <div class="ml-3 ms-5">
                                                 <h6>@item.Name</h6>
                                                 <div>
@@ -32,7 +33,7 @@
                                         </div>
                                         <div class="quantity-controls d-flex align-items-center">
                                             <button type="button" class="quantity-decrease btn btn-outline-secondary btn-sm">-</button>
-                                            <input type="text" name="quantities[@item.ProductId]" value="@item.Quantity" min="1" max="100" class="quantity-input form-control" data-price="@item.Price" readonly />
+                                            <input type="text" name="quantities[@item.ProductId]" data-productId="@item.ProductId" value="@item.Quantity" min="1" max="100" class="quantity-input form-control" data-price="@item.Price" readonly />
                                             <button type="button" class="quantity-increase btn btn-outline-secondary btn-sm">+</button>
                                         </div>
                                         <a asp-action="RemoveFromCart" asp-route-productId="@item.ProductId" class="btn btn-danger btn-sm position-absolute remove-button"><i class="fas fa-trash-alt"></i></a>
@@ -43,7 +44,6 @@
                     </div>
                     <div class="card-footer">
                         <a asp-action="RemoveAll" class="btn btn-danger btn-sm">Xoá tất cả giỏ hàng</a>
-                        @*<button type="submit" form="updateCartForm" class="btn btn-primary btn-sm">Cập nhật giỏ hàng</button>*@
                     </div>
                 </div>
             </div>
@@ -59,7 +59,7 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        <a id="checkoutButton" class="btn btn-success btn-block" asp-action="Checkout">Đặt hàng</a>
+                        <a id="checkoutButton" class="btn btn-success btn-block disabled" asp-action="Checkout" disabled>Đặt hàng</a>
                         <a class="btn btn-secondary btn-block" asp-controller="Home">Quay về trang chủ</a>
                     </div>
                 </div>
@@ -81,6 +81,7 @@ else
         document.addEventListener("DOMContentLoaded", function () {
             var cartItems = document.querySelectorAll(".cart-item");
             var selectAllCheckbox = document.getElementById("selectAll");
+            var selectAllLabel = document.getElementById("selectAllLabel");
             var totalAmountElement = document.getElementById("totalAmount");
             var checkoutButton = document.getElementById("checkoutButton");
 
@@ -90,52 +91,78 @@ else
                     checkbox.checked = isChecked;
                     checkbox.dispatchEvent(new Event("change"));
                 });
+                selectAllLabel.textContent = isChecked ? "Bỏ chọn tất cả" : "Chọn tất cả";
+                updateCheckoutButton();
             });
 
             document.querySelectorAll(".item-checkbox").forEach(function (checkbox) {
                 checkbox.addEventListener("change", function () {
                     updateTotalAmount();
                     updateSelectAllCheckbox();
+                    updateCheckoutButton();
                 });
             });
 
-            document.querySelectorAll(".quantity-input").forEach(function (input) {
-                input.addEventListener("input", function () {
-                    var checkbox = input.closest(".cart-item").querySelector(".item-checkbox");
-                    checkbox.setAttribute("data-quantity", input.value);
-                    if (checkbox.checked) {
-                        updateTotalAmount();
-                    }
-                });
+            $(".quantity-input").on("input", function () {
+                var $input = $(this);
+                var $checkbox = $input.closest(".cart-item").find(".item-checkbox");
+                console.log($checkbox);
+                $checkbox.attr("data-quantity", $input.val());
+                if ($checkbox.is(":checked")) {
+                    updateTotalAmount();
+                }
+                updateCheckoutButton();
             });
 
-            document.querySelectorAll(".quantity-increase").forEach(function (button) {
+            /*document.querySelectorAll(".quantity-increase").forEach(function (button) {
                 button.addEventListener("click", function () {
                     var input = button.closest(".quantity-controls").querySelector(".quantity-input");
                     var currentValue = parseInt(input.value);
+
+
                     if (currentValue < 100) {
                         input.value = currentValue + 1;
                         input.dispatchEvent(new Event("input"));
                     }
+                    updateCheckoutButton();
                 });
-            });
+            });*/
 
-            document.querySelectorAll(".quantity-decrease").forEach(function (button) {
-                button.addEventListener("click", function () {
-                    var input = button.closest(".quantity-controls").querySelector(".quantity-input");
-                    var currentValue = parseInt(input.value);
-                    if (currentValue > 1) {
-                        input.value = currentValue - 1;
-                        input.dispatchEvent(new Event("input"));
+            $(".quantity-increase").each(function () {
+                $(this).on("click", function () {
+                    var $input = $(this).closest(".quantity-controls").find(".quantity-input");
+                    var currentValue = parseInt($input.val());
+
+                    $.ajax({
+                        url: '/ShoppingCart/UpdateCart',
+                        type: 'POST',
+                        data: {
+                            productId: $input.data('productid'),
+                            quantity: currentValue + 1
+                        },
+                        success: function () {
+                            
+                        },
+                        error: function () { }
+                    });
+
+                    if (currentValue < 100) {
+                        $input.val(currentValue + 1);
+                        $input.trigger("input");
                     }
+                    updateCheckoutButton();
                 });
             });
 
-            checkoutButton.addEventListener("click", function (event) {
-                if (document.querySelectorAll(".item-checkbox:checked").length === 0) {
-                    event.preventDefault();
-                    alert("Vui lòng chọn ít nhất một sản phẩm để đặt hàng.");
+            $(".quantity-decrease").on("click", function () {
+                var $button = $(this);
+                var $input = $button.closest(".quantity-controls").find(".quantity-input");
+                var currentValue = parseInt($input.val());
+                if (currentValue > 1) {
+                    $input.val(currentValue - 1);
+                    $input.trigger("input");
                 }
+                updateCheckoutButton();
             });
 
             function updateTotalAmount() {
@@ -152,7 +179,24 @@ else
                 var totalCheckboxes = document.querySelectorAll(".item-checkbox").length;
                 var checkedCheckboxes = document.querySelectorAll(".item-checkbox:checked").length;
                 selectAllCheckbox.checked = totalCheckboxes === checkedCheckboxes;
+                selectAllLabel.textContent = totalCheckboxes === checkedCheckboxes ? "Bỏ chọn tất cả" : "Chọn tất cả";
             }
+
+            function updateCheckoutButton() {
+                var selectedItems = document.querySelectorAll(".item-checkbox:checked").length;
+                if (selectedItems === 0) {
+                    checkoutButton.textContent = "Đặt hàng";
+                    checkoutButton.classList.add("disabled");
+                    checkoutButton.disabled = true;
+                } else {
+                    checkoutButton.textContent = "Đặt hàng (" + selectedItems + ")";
+                    checkoutButton.classList.remove("disabled");
+                    checkoutButton.disabled = false;
+                }
+            }
+
+            // Initialize the checkout button text
+            updateCheckoutButton();
         });
     </script>
 }
@@ -205,5 +249,39 @@ else
         position: absolute;
         top: 10px;
         right: 10px;
+    }
+
+    .round-checkbox {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        background-color: #fff;
+        border: 1px solid #ced4da;
+        padding: 6px;
+        border-radius: 50%;
+        display: inline-block;
+        position: relative;
+    }
+
+        .round-checkbox:checked {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+            .round-checkbox:checked::after {
+                content: '\2714';
+                font-size: 14px;
+                color: #fff;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+
+    .btn.disabled, .btn:disabled {
+        background-color: #e0e0e0;
+        border-color: #e0e0e0;
+        cursor: not-allowed;
+        color: #6c757d;
     }
 </style>

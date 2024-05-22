@@ -20,5 +20,6 @@ namespace TUTSHOP.Data_Access
 		public DbSet<Contact> Contacts { get; set; }
 
 		public DbSet<Order> Orders { get; set; }
-	}
+        public DbSet<OrderDetail> OrderDetails { get; set; }
+    }
 }

@@ -2,99 +2,79 @@
 using Microsoft.AspNetCore.Mvc;
 using TUTSHOP.Models.Entities;
 using TUTSHOP.Models.Repositories;
+using TUTSHOP.Data_Access; // Thêm dòng này để sử dụng ApplicationDbContext
+using System.Linq;
 
 namespace TUTSHOP.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = SD.Role_Admin)]
+    [Authorize(Roles = "Admin")]
     public class AdminOrderController : Controller
     {
         private readonly IOrderRepository _orderRepository;
+        private readonly ApplicationDbContext _context; // Thêm ApplicationDbContext
 
-        public AdminOrderController(IOrderRepository orderRepository)
+        public AdminOrderController(IOrderRepository orderRepository, ApplicationDbContext context)
         {
             _orderRepository = orderRepository;
+            _context = context; // Khởi tạo ApplicationDbContext
         }
-
-        // Action hiển thị danh sách đơn hàng
-        [AllowAnonymous]
 
         public IActionResult Index()
         {
-            // Code để lấy danh sách đơn hàng và hiển thị
             var orders = _orderRepository.GetAll();
             return View(orders);
         }
-        [Authorize(Roles = "Admin")]
-        public IActionResult Create()
+
+        public IActionResult ApprovedOrders()
         {
-            // Hiển thị form để người dùng nhập thông tin tạo đơn hàng
-            return View();
+            var approvedOrders = _orderRepository.GetAll().Where(o => o.IsApproved).ToList();
+            return View(approvedOrders);
         }
 
-        [HttpPost]
-        public IActionResult Create(Order order)
+        public IActionResult PendingOrders()
         {
-            if (ModelState.IsValid)
-            {
-                // Lấy ID của khách hàng từ thông tin đăng nhập
-                order.UserId = User.Identity.Name;
-
-                // Lưu đơn hàng vào cơ sở dữ liệu hoặc thực hiện các bước khác để tạo đơn hàng
-
-                return RedirectToAction(nameof(Index)); // Chuyển hướng về trang danh sách đơn hàng sau khi tạo thành công
-            }
-            // Nếu thông tin không hợp lệ, hiển thị lại form với thông báo lỗi
-            return View(order);
+            var pendingOrders = _orderRepository.GetAll().Where(o => !o.IsApproved).ToList();
+            return View(pendingOrders);
         }
-        // Action hủy đơn hàng chỉ dành cho khách hàng
-        [Authorize(Roles = "Customer")]
-        public IActionResult Cancel(int orderId)
+
+        public IActionResult Details(int id)
         {
-            // Code để hủy đơn hàng của khách hàng
-            var order = _orderRepository.GetById(orderId);
+            var order = _orderRepository.GetById(id);
             if (order == null)
             {
                 return NotFound();
             }
 
-            // Kiểm tra xem đơn hàng có thuộc về khách hàng hiện tại hay không
-            if (order.UserId != User.Identity.Name)
+            // Lấy lại thông tin từ cơ sở dữ liệu để đảm bảo tính nhất quán
+            foreach (var detail in order.OrderDetails)
             {
-                return Forbid(); // Trả về 403 Forbidden nếu không phải khách hàng sở hữu đơn hàng
+                var product = _context.Products.Find(detail.ProductId);
+                detail.Product = product;
+                detail.Price = detail.Price * detail.Quantity; // Giá tổng cộng của sản phẩm
             }
 
-            // Xử lý hủy đơn hàng
-            _orderRepository.CancelOrder(orderId);
-            return RedirectToAction(nameof(Index));
-        }
-
-        /*// Action chỉ cho phép Admin xem chi tiết đơn hàng
-        [HttpPost]
-        public IActionResult Details(int orderId)
-        {
-            // Code để hiển thị chi tiết đơn hàng
-            var order = _orderRepository.GetById(orderId);
-            if (order == null)
-            {
-                return NotFound();
-            }
             return View(order);
         }
 
-        // Action chỉ cho phép Admin xóa đơn hàng
         [HttpPost]
-        public IActionResult Delete(int orderId)
+        public IActionResult UpdateStatus(int id, OrderStatus status)
         {
-            // Code để xóa đơn hàng
-            var order = _orderRepository.GetById(orderId);
+            _orderRepository.UpdateOrderStatus(id, status);
+            return RedirectToAction(nameof(ApprovedOrders));
+        }
+
+        public IActionResult ApproveOrder(int id)
+        {
+            var order = _orderRepository.GetById(id);
             if (order == null)
             {
                 return NotFound();
             }
 
-            _orderRepository.DeleteOrder(orderId);
-            return RedirectToAction(nameof(Index));
-        }*/
+            order.IsApproved = true;
+            _orderRepository.UpdateOrderStatus(id, OrderStatus.Processing); // Khi duyệt đơn hàng, đặt trạng thái là "Processing"
+            return RedirectToAction(nameof(PendingOrders));
+        }
     }
 }
