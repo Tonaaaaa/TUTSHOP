@@ -333,9 +333,12 @@ namespace TUTSHOP.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+<<<<<<< HEAD
                     b.Property<bool>("IsApproved")
                         .HasColumnType("bit");
 
+=======
+>>>>>>> e0ac765eb2f95895fa1feb7dd6909cf58db59e11
                     b.Property<string>("Notes")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
