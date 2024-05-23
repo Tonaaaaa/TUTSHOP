@@ -5,12 +5,12 @@
 				<h3 data-bs-target="#collapse_1">Quick Links</h3>
 				<div class="collapse dont-collapse-sm links" id="collapse_1">
 					<ul>
-						<li><a href="about.html">About us</a></li>
-						<li><a href="help.html">Faq</a></li>
-						<li><a href="help.html">Help</a></li>
+						@* <li><a href="about.html">About us</a></li> *@
+						<li><a href="@Url.Action("Index", "Contact")">Faq</a></li>
+						<li><a href="@Url.Action("Index", "Contact")">Help</a></li>
 						<li><a href="account.html">My account</a></li>
 						<li><a href="blog.html">Blog</a></li>
-						<li><a href="contacts.html">Contacts</a></li>
+						<li><a href="@Url.Action("Index", "Contact")">Contacts</a></li>
 					</ul>
 				</div>
 			</div>
@@ -18,12 +18,16 @@
 				<h3 data-bs-target="#collapse_2">Categories</h3>
 				<div class="collapse dont-collapse-sm links" id="collapse_2">
 					<ul>
-						<li><a href="listing-grid-1-full.html">Clothes</a></li>
-						<li><a href="listing-grid-2-full.html">Electronics</a></li>
-						<li><a href="listing-grid-1-full.html">Furniture</a></li>
-						<li><a href="listing-grid-3.html">Glasses</a></li>
-						<li><a href="listing-grid-1-full.html">Shoes</a></li>
-						<li><a href="listing-grid-1-full.html">Watches</a></li>
+						<li><a href="@Url.Action("Index", "Product", new { category = "Điện thoại" })">Điện thoại</a></li>
+						<li><a href="@Url.Action("Index", "Product", new { category = "Laptop" })">Laptop</a></li>
+						<li><a href="@Url.Action("Index", "Product", new { category = "Âm thanh" })">Âm thanh</a></li>
+						<li><a href="@Url.Action("Index", "Product", new { category = "PhuKien" })">Phụ kiện</a></li>
+						<li><a href="@Url.Action("Index", "Product", new { category = "Smartwatch" })">Smartwatch</a></li>
+						<li><a href="@Url.Action("Index", "Product", new { category = "DongHo" })">Đồng hồ</a></li>
+						<li><a href="@Url.Action("Index", "Product", new { category = "MayCu" })">Máy cũ</a></li>
+						<li><a href="@Url.Action("Index", "Product", new { category = "PC" })">PC</a></li>
+						<li><a href="@Url.Action("Index", "Product", new { category = "SimTheCao" })">Sim, Thẻ cào</a></li>
+						<li><a href="@Url.Action("Index", "Product", new { category = "DichVuTienIch" })">Dịch vụ tiện ích</a></li>
 					</ul>
 				</div>
 			</div>
@@ -31,9 +35,9 @@
 				<h3 data-bs-target="#collapse_3">Contacts</h3>
 				<div class="collapse dont-collapse-sm contacts" id="collapse_3">
 					<ul>
-						<li><i class="ti-home"></i>97845 Baker st. 567<br>Los Angeles - US</li>
-						<li><i class="ti-headphone-alt"></i>+94 423-23-221</li>
-						<li><i class="ti-email"></i><a href="#0">info@allaia.com</a></li>
+						<li><i class="ti-home"></i>159 Trần Văn Đang<br>TP.HCM - VietNam</li>
+						<li><i class="ti-headphone-alt"></i>+84 967 123 456</li>
+						<li><i class="ti-email"></i><a href="#0">lephuonguyen21082003@gmail.com</a></li>
 					</ul>
 				</div>
 			</div>

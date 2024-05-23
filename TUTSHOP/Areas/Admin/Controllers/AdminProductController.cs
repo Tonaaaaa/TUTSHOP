@@ -150,5 +150,7 @@ namespace TUTSHOP.Areas.Admin.Controllers
             }
             return "/images/" + image.FileName;
         }
+
+        
     }
 }

@@ -20,7 +20,7 @@
                                                 <h2 class="owl-slide-animated owl-slide-title is-transitioned">Tên Sản Phẩm</h2>
                                                 <p class="owl-slide-animated owl-slide-subtitle is-transitioned">Limited items available at this price</p>
                                                 <div class="owl-slide-animated owl-slide-cta is-transitioned">
-                                                    <a class="btn_1" href="listing-grid-1-full.html" role="button">Shop Now</a>
+                                                    <a class="btn_1" id="shop_now_btn_phone" href="@Url.Action("Index", "Product", new { category = "Điện thoại" })" role="button">Shop Now</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -39,29 +39,29 @@
 
     <ul id="banners_grid" class="clearfix">
         <li>
-            <a href="#0" class="img_container">
+            <a href="@Url.Action("Index", "Product", new { category = "Laptop" })" class="img_container">
                 <img src="~/images/laptopcolleciton.jpg" alt="Laptop Collection" class="lazy loaded" style="object-fit: fill">
                 <div class="short_info opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.5)" style="background-color: rgba(0, 0, 0, 0.5);">
                     <h3>Laptop Collection</h3>
-                    <div><span class="btn_1">Shop Now</span></div>
+                    <div><span class="btn_1" id="shop_now_btn_laptop">Shop Now</span></div>
                 </div>
             </a>
         </li>
         <li>
-            <a href="#0" class="img_container">
+            <a href="@Url.Action("Index", "Product", new { category = "Điện thoại" })" class="img_container">
                 <img src="~/images/iphonecollection.jpg" alt="Phone Collection" class="lazy loaded">
                 <div class="short_info opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.5)" style="background-color: rgba(0, 0, 0, 0.5);">
                     <h3>Phone Collection</h3>
-                    <div><span class="btn_1">Shop Now</span></div>
+                    <div><span class="btn_1" id="shop_now_btn_phone">Shop Now</span></div>
                 </div>
             </a>
         </li>
         <li>
-            <a href="#0" class="img_container">
+            <a href="@Url.Action("Index", "Product", new { category = "Phụ kiện" })" class="img_container">
                 <img src="~/images/accessorycollection.jpg" alt="Accessory Collection" class="lazy loaded">
                 <div class="short_info opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.5)" style="background-color: rgba(0, 0, 0, 0.5);">
                     <h3>Accessory Collection</h3>
-                    <div><span class="btn_1">Shop Now</span></div>
+                    <div><span class="btn_1" id="shop_now_btn_accessory">Shop Now</span></div>
                 </div>
             </a>
         </li>
@@ -163,8 +163,9 @@
                                     <div class="grid_item">
                                         <span class="ribbon new">New</span>
                                         <figure>
-                                            <a href="product-detail-1.html">
-                                                <img class="owl-lazy img-fluid" data-src="@item.ImageUrl" alt="" width="100" height="100">
+                                            <span class="ribbon off">-@item.DiscountId%</span>
+                                            <a asp-controller="Product" asp-action="Details" asp-route-id="@item.ProductId">
+                                                <img class="img-fluid lazy loaded" src="@item.ImageUrl" alt="" width="200" height="200">
                                             </a>
                                         </figure>
                                         <div class="rating">
@@ -282,3 +283,4 @@
     </div>
 </div>
 <!-- /container -->
+

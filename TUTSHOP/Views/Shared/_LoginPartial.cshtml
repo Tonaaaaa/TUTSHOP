@@ -6,15 +6,21 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
-
     <a id="manage" class="" asp-area="Identity" asp-page="/Account/Manage/Index" title="Quản lý" style="color: white;">Hello @UserManager.GetUserName(User)!</a>
-
+    @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+    {
+        <li class="nav-item">
+            <a id="manage" class="nav-link text-dark" asp-area="Admin" asp-controller="AdminHome" asp-action="Index">
+                <i class="fas fa-user-cog"></i> Admin
+            </a>
+        </li>
+    }
     <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post" id="logoutForm" class="navbar-right">
         <ul class="nav navbar-nav navbar-right">
-            
-            <li>
-                <a class="" id="logout" asp-area="Identity" asp-page="/Account/Login">Logout</a>
-                  
+            <li style="display: inline-block; margin-right: 10px;">
+                <a class="" id="logout" asp-area="Identity" asp-page="/Account/Login">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
             </li>
         </ul>
     </form>
@@ -22,7 +28,16 @@
 else
 {
     <ul class="nav navbar-nav navbar-right">
-        <li><a class="bi bi-person-fill-add" id="register" asp-area="Identity" asp-page="/Account/Register">Register</a></li>
-        <li><a class="bi bi-person-circle" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a></li>
+        <li style="display: inline-block; margin-right: 10px;"><a class="bi bi-person-fill-add" id="register" asp-area="Identity" asp-page="/Account/Register">Register</a></li>
+        <li style="display: inline-block;"><a class="bi bi-person-circle" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a></li>
     </ul>
 }
+<style>
+    .navbar-nav > li > a {
+        padding: 15px 20px; /* Điều chỉnh kích thước của nút */
+    }
+
+        .navbar-nav > li > a i {
+            margin-right: 5px; /* Điều chỉnh khoảng cách giữa biểu tượng và văn bản */
+        }
+</style>

@@ -76,5 +76,60 @@ namespace TUTSHOP.Areas.Admin.Controllers
             _orderRepository.UpdateOrderStatus(id, OrderStatus.Processing); // Khi duyệt đơn hàng, đặt trạng thái là "Processing"
             return RedirectToAction(nameof(PendingOrders));
         }
+
+        public IActionResult TotalRevenue()
+        {
+            /*var approvedOrders = _orderRepository.GetAll().Where(o => o.IsApproved).ToList();
+            decimal totalRevenue = 0;
+
+            foreach (var order in approvedOrders)
+            {
+                foreach (var detail in order.OrderDetails)
+                {
+                    var product = _context.Products.Find(detail.ProductId);
+                    if (product != null)
+                    {
+                        totalRevenue += (decimal)product.Price * (decimal)detail.Quantity;
+
+
+                    }
+                }
+            }
+
+            ViewBag.TotalRevenue = totalRevenue;
+            return View();*/
+
+            var allOrders = _orderRepository.GetAll().ToList();
+            decimal totalRevenue = 0;
+            int totalApprovedOrders = 0;
+            int totalPendingOrders = 0;
+
+            foreach (var order in allOrders)
+            {
+                // Tính tổng doanh thu của các đơn hàng đã được duyệt
+                if (order.IsApproved)
+                {
+                    foreach (var detail in order.OrderDetails)
+                    {
+                        var product = _context.Products.Find(detail.ProductId);
+                        if (product != null)
+                        {
+                            totalRevenue += (decimal)product.Price * (decimal)detail.Quantity;
+                        }
+                    }
+                    totalApprovedOrders += order.OrderDetails.Sum(detail => detail.Quantity);
+                }
+                else
+                {
+                    // Tính tổng số lượng đơn hàng chưa được duyệt
+                    totalPendingOrders += order.OrderDetails.Sum(detail => detail.Quantity);
+                }
+            }
+
+            ViewBag.TotalRevenue = totalRevenue;
+            ViewBag.TotalApprovedOrders = totalApprovedOrders;
+            ViewBag.TotalPendingOrders = totalPendingOrders;
+            return View();
+        }
     }
 }
