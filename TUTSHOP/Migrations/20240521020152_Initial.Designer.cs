@@ -12,8 +12,13 @@ using TUTSHOP.Data_Access;
 namespace TUTSHOP.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240521173137_model2")]
-    partial class model2
+<<<<<<<< HEAD:TUTSHOP/Migrations/20240523135432_Updb.Designer.cs
+    [Migration("20240523135432_Updb")]
+    partial class Updb
+========
+    [Migration("20240521020152_Initial")]
+    partial class Initial
+>>>>>>>> e0ac765eb2f95895fa1feb7dd6909cf58db59e11:TUTSHOP/Migrations/20240521020152_Initial.Designer.cs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

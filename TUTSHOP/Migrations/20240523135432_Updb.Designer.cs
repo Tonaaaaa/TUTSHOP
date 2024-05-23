@@ -12,8 +12,13 @@ using TUTSHOP.Data_Access;
 namespace TUTSHOP.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240521153830_model1")]
-    partial class model1
+<<<<<<<< HEAD:TUTSHOP/Migrations/20240523135432_Updb.Designer.cs
+    [Migration("20240523135432_Updb")]
+    partial class Updb
+========
+    [Migration("20240521020152_Initial")]
+    partial class Initial
+>>>>>>>> e0ac765eb2f95895fa1feb7dd6909cf58db59e11:TUTSHOP/Migrations/20240521020152_Initial.Designer.cs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -397,7 +402,7 @@ namespace TUTSHOP.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderDetail");
+                    b.ToTable("OrderDetails");
                 });
 
             modelBuilder.Entity("TUTSHOP.Models.Entities.Product", b =>
