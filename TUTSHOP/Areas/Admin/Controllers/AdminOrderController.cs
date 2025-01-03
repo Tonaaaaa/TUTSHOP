@@ -1,9 +1,17 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.IO;
+using iText.Kernel.Font;
+using iText.Kernel.Pdf;
+using iText.Layout;
+using iText.Layout.Element;
+using iText.Layout.Properties;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TUTSHOP.Models.Entities;
 using TUTSHOP.Models.Repositories;
-using TUTSHOP.Data_Access; // Thêm dòng này để sử dụng ApplicationDbContext
+using TUTSHOP.Data_Access;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using iText.IO.Font;
 
 namespace TUTSHOP.Areas.Admin.Controllers
 {
@@ -12,12 +20,12 @@ namespace TUTSHOP.Areas.Admin.Controllers
     public class AdminOrderController : Controller
     {
         private readonly IOrderRepository _orderRepository;
-        private readonly ApplicationDbContext _context; // Thêm ApplicationDbContext
+        private readonly ApplicationDbContext _context;
 
         public AdminOrderController(IOrderRepository orderRepository, ApplicationDbContext context)
         {
             _orderRepository = orderRepository;
-            _context = context; // Khởi tạo ApplicationDbContext
+            _context = context;
         }
 
         public IActionResult Index()
@@ -29,6 +37,16 @@ namespace TUTSHOP.Areas.Admin.Controllers
         public IActionResult ApprovedOrders()
         {
             var approvedOrders = _orderRepository.GetAll().Where(o => o.IsApproved).ToList();
+
+            foreach (var order in approvedOrders)
+            {
+                if (order.PaymentMethod == "VNPay" && order.OrderStatus != OrderStatus.Paid)
+                {
+                    order.OrderStatus = OrderStatus.Paid;
+                    _orderRepository.UpdateOrderStatus(order.Id, OrderStatus.Paid);
+                }
+            }
+
             return View(approvedOrders);
         }
 
@@ -46,22 +64,29 @@ namespace TUTSHOP.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            // Lấy lại thông tin từ cơ sở dữ liệu để đảm bảo tính nhất quán
             foreach (var detail in order.OrderDetails)
             {
                 var product = _context.Products.Find(detail.ProductId);
                 detail.Product = product;
-                detail.Price = detail.Price * detail.Quantity; // Giá tổng cộng của sản phẩm
+                detail.Price = detail.Price * detail.Quantity;
             }
 
             return View(order);
         }
 
         [HttpPost]
-        public IActionResult UpdateStatus(int id, OrderStatus status)
+        public IActionResult UpdateOrderStatus(int orderId, OrderStatus newStatus)
         {
-            _orderRepository.UpdateOrderStatus(id, status);
-            return RedirectToAction(nameof(ApprovedOrders));
+            var order = _context.Orders.Find(orderId);
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            order.OrderStatus = newStatus;
+            _context.SaveChanges();
+
+            return RedirectToAction("ApprovedOrders");
         }
 
         public IActionResult ApproveOrder(int id)
@@ -73,7 +98,7 @@ namespace TUTSHOP.Areas.Admin.Controllers
             }
 
             order.IsApproved = true;
-            _orderRepository.UpdateOrderStatus(id, OrderStatus.Processing); // Khi duyệt đơn hàng, đặt trạng thái là "Processing"
+            _orderRepository.UpdateOrderStatus(id, OrderStatus.Processing);
             return RedirectToAction(nameof(PendingOrders));
         }
 

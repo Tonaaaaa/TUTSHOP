@@ -7,6 +7,8 @@
     <title>Modernize Free</title>
     <link rel="shortcut icon" type="image/png" href="~/AdminAssets/images/logos/favicon.png" />
     <link rel="stylesheet" href="~/AdminAssets/css/styles.min.css" />
+    <!-- Thêm Font Awesome nếu chưa có -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 
 <body>
@@ -78,15 +80,6 @@
                         </li>
 
                         <li class="sidebar-item">
-                            <a asp-controller="AdminProductVariant" asp-action="Index" class="sidebar-link" aria-expanded="false">
-                                <span>
-                                    <i class="ti ti-alert-circle"></i>
-                                </span>
-                                <span class="hide-menu">Quản lí thuộc tính</span>
-                            </a>
-                        </li>
-
-                         <li class="sidebar-item">
                             <a asp-controller="AdminContact" asp-action="Index" class="sidebar-link" aria-expanded="false">
                                 <span>
                                     <i class="ti ti-alert-circle"></i>
@@ -101,25 +94,23 @@
                                     <i class="ti ti-alert-circle"></i>
                                 </span>
                                 <span class="hide-menu">Quản lí đơn hàng</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a asp-controller="AdminOrder" asp-action="PendingOrders" class="sidebar-link" aria-expanded="false">
-                                <span>
-                                    <i class="ti ti-alert-circle"></i>
+                                <span class="arrow-icon">
+                                    <i class="fas fa-chevron-down"></i>
                                 </span>
-                                <span class="hide-menu">Quản lí đơn hàng chưa duyệt</span>
                             </a>
+                            <ul class="collapse first-level base-level-line">
+                                <li class="sidebar-item">
+                                    <a asp-controller="AdminOrder" asp-action="PendingOrders" class="sidebar-link" aria-expanded="false">
+                                        <span class="hide-menu">Đơn hàng chưa duyệt</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a asp-controller="AdminOrder" asp-action="ApprovedOrders" class="sidebar-link" aria-expanded="false">
+                                        <span class="hide-menu">Đơn hàng đã duyệt</span>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
-                        <li class="sidebar-item">
-                            <a asp-controller="AdminOrder" asp-action="ApprovedOrders" class="sidebar-link" aria-expanded="false">
-                                <span>
-                                    <i class="ti ti-alert-circle"></i>
-                                </span>
-                                <span class="hide-menu">Quản lí đơn hàng đã duyệt</span>
-                            </a>
-                        </li>
-
 
                         <li class="nav-small-cap">
                             <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
@@ -141,80 +132,15 @@
                                 <span class="hide-menu">Tài khoản người dùng</span>
                             </a>
                         </li>
-                        <li class="sidebar-item">
+                        @* <li class="sidebar-item">
                             <a class="sidebar-link" href="./ui-buttons.html" aria-expanded="false">
                                 <span>
                                     <i class="ti ti-article"></i>
                                 </span>
                                 <span class="hide-menu">Tài khoản bị chặn</span>
                             </a>
-                        </li>
-                        @* <li class="sidebar-item">
-                            <a class="sidebar-link" href="./ui-card.html" aria-expanded="false">
-                                <span>
-                                    <i class="ti ti-cards"></i>
-                                </span>
-                                <span class="hide-menu">Card</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a class="sidebar-link" href="./ui-forms.html" aria-expanded="false">
-                                <span>
-                                    <i class="ti ti-file-description"></i>
-                                </span>
-                                <span class="hide-menu">Forms</span>
-                            </a>
-                        </li> *@
-                       @*  <li class="sidebar-item">
-                            <a class="sidebar-link" href="./ui-typography.html" aria-expanded="false">
-                                <span>
-                                    <i class="ti ti-typography"></i>
-                                </span>
-                                <span class="hide-menu">Typography</span>
-                            </a>
-                        </li>
-                        <li class="nav-small-cap">
-                            <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-                            <span class="hide-menu">AUTH</span>
-                        </li>
-                        <li class="sidebar-item">
-                            <a class="sidebar-link" href="./authentication-login.html" aria-expanded="false">
-                                <span>
-                                    <i class="ti ti-login"></i>
-                                </span>
-                                <span class="hide-menu">Login</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a class="sidebar-link" href="./authentication-register.html" aria-expanded="false">
-                                <span>
-                                    <i class="ti ti-user-plus"></i>
-                                </span>
-                                <span class="hide-menu">Register</span>
-                            </a>
-                        </li>
-                        <li class="nav-small-cap">
-                            <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-                            <span class="hide-menu">EXTRA</span>
-                        </li>
-                        <li class="sidebar-item">
-                            <a class="sidebar-link" href="./icon-tabler.html" aria-expanded="false">
-                                <span>
-                                    <i class="ti ti-mood-happy"></i>
-                                </span>
-                                <span class="hide-menu">Icons</span>
-                            </a>
-                        </li> *@
-                       @*  <li class="sidebar-item">
-                            <a class="sidebar-link" href="./sample-page.html" aria-expanded="false">
-                                <span>
-                                    <i class="ti ti-aperture"></i>
-                                </span>
-                                <span class="hide-menu">Sample Page</span>
-                            </a>
                         </li> *@
                     </ul>
-                    
                 </nav>
                 <!-- End Sidebar navigation -->
             </div>
@@ -271,8 +197,7 @@
             <!--  Header End -->
             <div class="container-fluid">
                 <!--  Row 1 -->
-               @RenderBody()
-               
+                @RenderBody()
             </div>
         </div>
     </div>

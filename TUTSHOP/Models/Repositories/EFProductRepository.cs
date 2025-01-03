@@ -64,5 +64,11 @@ namespace TUTSHOP.Models.Repositories
                                  .Where(p => p.Category.CategoryName == category)
                                  .ToListAsync();
         }
+        public async Task<IEnumerable<Product>> SearchProductsAsync(string searchTerm)
+        {
+            return await _context.Products
+                .Where(p => p.ProductName.Contains(searchTerm) || p.Description.Contains(searchTerm))
+                .ToListAsync();
+        }
     }
 }

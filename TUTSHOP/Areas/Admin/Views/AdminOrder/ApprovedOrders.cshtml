@@ -7,32 +7,40 @@
             <h2 class="mb-0">Đơn hàng đã duyệt</h2>
         </div>
         <div class="card-body">
+            <div class="mb-3">
+                <input type="text" id="searchTerm" class="form-control" placeholder="Tìm kiếm tên khách hàng..." />
+            </div>
             <table class="table table-hover table-bordered">
                 <thead class="thead-dark">
                     <tr>
                         <th>Order ID</th>
-                        <th>User ID</th>
+                        <th>Tên khách hàng</th>
+                        <th>Số điện thoại</th>
                         <th>Ngày đặt hàng</th>
                         <th>Tổng tiền</th>
                         <th>Trạng thái</th>
                         <th>Hành động</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="orderTableBody">
                     @foreach (var order in Model)
                     {
                         <tr>
                             <td>@order.Id</td>
-                            <td>@order.UserId</td>
+                            <td>@order.ApplicationUser.FullName</td>
+                            <td>@order.ApplicationUser.PhoneNumber</td>
                             <td>@order.OrderDate.ToString("dd/MM/yyyy")</td>
                             <td>@order.TotalPrice.ToString("N0") đ</td>
                             <td>
                                 <span class="badge
                                     @(order.OrderStatus == OrderStatus.Pending ? "badge-warning" :
-                                    order.OrderStatus == OrderStatus.Processing ? "badge-info" :
-                                    order.OrderStatus == OrderStatus.Shipped ? "badge-primary" :
+                                    order.OrderStatus == OrderStatus.Processing ? "badge-primary" :
+                                    order.OrderStatus == OrderStatus.Shipped ? "badge-info" :
                                     order.OrderStatus == OrderStatus.Delivered ? "badge-success" :
-                                    "badge-danger")">
+                                    order.OrderStatus == OrderStatus.Paid ? "badge-green" :
+                                    order.OrderStatus == OrderStatus.Unpaid ? "badge-dark-gray" :
+                                    order.OrderStatus == OrderStatus.Cancelled ? "badge-danger" :
+                                    "badge-secondary")">
                                     @order.OrderStatus
                                 </span>
                             </td>
@@ -47,24 +55,71 @@
     </div>
 </div>
 
+@section Scripts {
+    <script>
+        document.getElementById('searchTerm').addEventListener('input', function () {
+            var searchTerm = this.value;
+            fetch(`/Admin/AdminOrder/SearchOrders?searchTerm=${searchTerm}`)
+                .then(response => response.json())
+                .then(data => {
+                    var tbody = document.getElementById('orderTableBody');
+                    tbody.innerHTML = '';
+                    data.forEach(order => {
+                        var tr = document.createElement('tr');
+                        tr.innerHTML = `
+                                    <td>${order.id}</td>
+                                    <td>${order.userFullName}</td>
+                                    <td>${order.userPhoneNumber}</td>
+                                    <td>${order.orderDate}</td>
+                                    <td>${order.totalPrice} đ</td>
+                                    <td><span class="badge ${order.orderStatus === 'Pending' ? 'badge-warning' :
+                                order.orderStatus === 'Processing' ? 'badge-primary' :
+                                    order.orderStatus === 'Shipped' ? 'badge-info' :
+                                        order.orderStatus === 'Delivered' ? 'badge-success' :
+                                            order.orderStatus === 'Paid' ? 'badge-green' :
+                                                order.orderStatus === 'Unpaid' ? 'badge-dark-gray' :
+                                                    order.orderStatus === 'Cancelled' ? 'badge-danger' :
+                                                        'badge-secondary'
+                            }">${order.orderStatus}</span></td>
+                                    <td><a href="/Admin/AdminOrder/Details/${order.id}" class="btn btn-info btn-sm">Chi tiết</a></td>
+                                `;
+                        tbody.appendChild(tr);
+                    });
+                });
+        });
+    </script>
+}
+
 <style>
     .badge-warning {
         background-color: #ffc107;
-    }
-
-    .badge-info {
-        background-color: #17a2b8;
     }
 
     .badge-primary {
         background-color: #007bff;
     }
 
+    .badge-info {
+        background-color: #17a2b8;
+    }
+
     .badge-success {
         background-color: #28a745;
     }
 
+    .badge-green {
+        background-color: #28a745; /* Màu xanh lá */
+    }
+
+    .badge-dark-gray {
+        background-color: #343a40; /* Màu xám đen */
+    }
+
     .badge-danger {
         background-color: #dc3545;
+    }
+
+    .badge-secondary {
+        background-color: #6c757d;
     }
 </style>

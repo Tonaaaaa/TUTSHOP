@@ -8,7 +8,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+var config = builder.Configuration;
 
+builder.Services.AddAuthentication().AddGoogle(googleOptions =>
+{
+    googleOptions.ClientId = config["Authentication:Google:ClientId"];
+    googleOptions.ClientSecret = config["Authentication:Google:ClientSecret"];
+});
 
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
@@ -40,6 +46,7 @@ builder.Services.AddScoped<IDiscountCodeRepository, EFDiscountCodeRepository>();
 builder.Services.AddScoped<IProductVariantRepository, EFProductVariantRepository>();
 builder.Services.AddScoped<IContactRepository, EFContactRepository>();
 builder.Services.AddScoped<IOrderRepository, EFOrderRepository>();
+builder.Services.AddSingleton<IVnPayRespository, EFVnPayRespository>();
 
 var app = builder.Build();
 

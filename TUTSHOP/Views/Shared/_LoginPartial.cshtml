@@ -4,14 +4,9 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
-<head>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-</head>
-
 @if (SignInManager.IsSignedIn(User))
 {
-<<<<<<< HEAD
-    <a id="manage" class="" asp-area="Identity" asp-page="/Account/Manage/Index" title="Quản lý" style="color: white;">Hello @UserManager.GetUserName(User)!</a>
+    <a id="manage" class="text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Quản lý">Hello @UserManager.GetUserName(User)!</a>
     @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
     {
         <li class="nav-item">
@@ -25,56 +20,11 @@
             <li style="display: inline-block; margin-right: 10px;">
                 <a class="" id="logout" asp-area="Identity" asp-page="/Account/Login">
                     <i class="fas fa-sign-out-alt"></i> Logout
-=======
-
-@* <a id="manage" class="" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage" style="color: white;">Hello @UserManager.GetUserAsync(User).Result.FullName!</a>
-
-
-    @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
-    {
-        <li class="nav-item">
-            <a id="manage" class="nav-link text-dark" asp-area="Admin" asp-controller="AdminHome" asp-action="Index">Admin</a>
-        </li>
-    }
-
-    <li>
-        <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post" id="logoutForm" class="navbar-right">
-            <ul class="nav navbar-nav navbar-right">
-
-                <li>
-                    <a class="" id="logout" asp-area="Identity" asp-page="/Account/Login">Logout</a>
-
-                </li>
-            </ul>
-        </form>
-    </li> *@
-
-    <ul class="navbar-nav ml-auto d-flex align-items-center">
-        @if (SignInManager.IsSignedIn(User))
-        {
-            <li class="nav-item">
-                <a id="manage" class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage" style="color: white;">
-                    Hello @UserManager.GetUserAsync(User).Result.FullName!
->>>>>>> e0ac765eb2f95895fa1feb7dd6909cf58db59e11
                 </a>
             </li>
-
-            @if (User.IsInRole("Admin"))
-            {
-                <li class="nav-item">
-                    <a id="admin" class="nav-link text-dark" asp-area="Admin" asp-controller="AdminHome" asp-action="Index">Admin</a>
-                </li>
-            }
-
-            <li class="nav-item">
-                <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post" id="logoutForm" class="form-inline">
-                    <button type="submit" class="btn btn-link nav-link" style="color: white; text-decoration: none;">Logout</button>
-                </form>
-            </li>
-        }
-    </ul>
-    
-    }
+        </ul>
+    </form>
+}
 else
 {
     <ul class="nav navbar-nav navbar-right">
