@@ -1,55 +1,35 @@
-﻿@model IEnumerable<TUTSHOP.Models.Entities.Product>
+﻿@model X.PagedList.IPagedList<TUTSHOP.Models.Entities.Product>
+@using X.PagedList.Mvc.Core;
 
 @{
     ViewData["Title"] = "Index";
 }
 
-
-<div class="modal fade" id="deleteProductModal" tabindex="-1" aria-labelledby="deleteProductModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="deleteProductModalLabel">Xác nhận xóa sản phẩm</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                Bạn có chắc chắn muốn xóa sản phẩm này?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                <form id="deleteProductForm" asp-action="DeleteConfirmed" method="post">
-                    <input type="hidden" id="productId" name="id" />
-                    <button type="submit" class="btn btn-danger">Xóa</button>
-                </form>
-            </div>
-        </div>
+<div class="m-2 d-flex justify-content-between m-3">
+    <div class="align-items-center">
+        <input type="text" id="searchTerm" class="form-control" placeholder="Tìm kiếm sản phẩm..." />
     </div>
-</div>
-
-
-<div class="m-2 d-flex justify-content-end m-3 ">
     <div class="align-items-center">
         <a class="btn btn-primary btn-tone" asp-area="Admin" asp-action="Create">Tạo mới</a>
     </div>
 </div>
-
 
 <div class="card">
     <div class="table-responsive">
         <table class="table">
             <thead>
                 <tr>
-                    <th>@Html.DisplayNameFor(model => model.ProductId)</th>
-                    <th>@Html.DisplayNameFor(model => model.ImageUrl)</th>
-                    <th>@Html.DisplayNameFor(model => model.ProductName)</th>
-                    <th>@Html.DisplayNameFor(model => model.Display)</th>
-                    <th>@Html.DisplayNameFor(model => model.HotSeller)</th>
-                    <th>@Html.DisplayNameFor(model => model.Price)</th>
-                    <th>@Html.DisplayNameFor(model => model.OldPrice)</th>
+                    <th>@Html.DisplayNameFor(model => model[0].ProductId)</th>
+                    <th>@Html.DisplayNameFor(model => model[0].ImageUrl)</th>
+                    <th>@Html.DisplayNameFor(model => model[0].ProductName)</th>
+                    <th>@Html.DisplayNameFor(model => model[0].Display)</th>
+                    <th>@Html.DisplayNameFor(model => model[0].HotSeller)</th>
+                    <th>@Html.DisplayNameFor(model => model[0].Price)</th>
+                    <th>@Html.DisplayNameFor(model => model[0].OldPrice)</th>
                     <th></th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="productList">
                 @foreach (var item in Model)
                 {
                     <tr>
@@ -76,7 +56,6 @@
                                 <span class="badge bg-success rounded-3 fw-semibold">Bán chạy</span>
                             }
                         </td>
-
                         <td class="price">@item.Price</td>
                         <td class="old-price">@item.OldPrice</td>
                         <td class="border-bottom-0">
@@ -96,40 +75,133 @@
             </tbody>
         </table>
     </div>
+    <div class="d-flex justify-content-center my-3">
+        <nav>
+            <ul class="pagination">
+                @if (Model.HasPreviousPage)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="@Url.Action("Index", new { page = Model.PageNumber - 1 })" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                }
+                else
+                {
+                    <li class="page-item disabled">
+                        <span class="page-link" aria-hidden="true">&laquo;</span>
+                    </li>
+                }
+                @for (int i = 1; i <= Model.PageCount; i++)
+                {
+                    if (i == Model.PageNumber)
+                    {
+                        <li class="page-item active"><span class="page-link">@i</span></li>
+                    }
+                    else
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("Index", new { page = i })">@i</a>
+                        </li>
+                    }
+                }
+                @if (Model.HasNextPage)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="@Url.Action("Index", new { page = Model.PageNumber + 1 })" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                }
+                else
+                {
+                    <li class="page-item disabled">
+                        <span class="page-link" aria-hidden="true">&raquo;</span>
+                    </li>
+                }
+            </ul>
+        </nav>
+    </div>
 </div>
+
 @section scripts {
     <script>
         $(document).ready(function () {
+            // Thêm sự kiện tìm kiếm sản phẩm
+            $('#searchTerm').on('keyup', function () {
+                var searchTerm = $(this).val();
+                $.ajax({
+                    url: '@Url.Action("Search", "AdminProduct")',
+                    data: { searchTerm: searchTerm },
+                    success: function (result) {
+                        var html = '';
+                        $.each(result, function (index, item) {
+                            var displayBadge = item.display ? '<span class="badge bg-success rounded-3 fw-semibold">Hiển thị</span>' : '<span class="badge bg-danger rounded-3 fw-semibold">Không</span>';
+                            var hotSellerBadge = item.hotSeller ? '<span class="badge bg-success rounded-3 fw-semibold">Bán chạy</span>' : '<span class="badge bg-danger rounded-3 fw-semibold">Không</span>';
+                            var formattedPrice = parseFloat(item.price).toLocaleString('vi-VN') + ' đ';
+                            var formattedOldPrice = parseFloat(item.oldPrice).toLocaleString('vi-VN') + ' đ';
+
+                            html += '<tr>' +
+                                '<td>' + item.productId + '</td>' +
+                                '<td><img src="' + item.imageUrl + '" alt="' + item.productName + '" style="max-width: 50px; max-height: 50px;"></td>' +
+                                '<td>' + item.productName + '</td>' +
+                                '<td>' + displayBadge + '</td>' +
+                                '<td>' + hotSellerBadge + '</td>' +
+                                '<td class="price">' + formattedPrice + '</td>' +
+                                '<td class="old-price">' + formattedOldPrice + '</td>' +
+                                '<td class="border-bottom-0">' +
+                                '<div class="dropdown">' +
+                                '<button type="button" class="btn border-0 p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">' +
+                                '<i class="bx bx-dots-vertical-rounded"></i>' +
+                                '</button>' +
+                                '<div class="dropdown-menu">' +
+                                '<a class="dropdown-item" href="/Admin/AdminProduct/Edit/' + item.productId + '"><i class="bx bx-edit-alt me-1"></i>Edit</a>' +
+                                '<a class="dropdown-item" href="/Admin/AdminProduct/Details/' + item.productId + '"><i class="bx bx-info-circle me-1"></i>Details</a>' +
+                                '<button type="button" class="dropdown-item deleteButton" data-product-id="' + item.productId + '" data-bs-toggle="modal" data-bs-target="#deleteProductModal"><i class="bx bx-trash me-1"></i>Delete</button>' +
+                                '</div>' +
+                                '</div>' +
+                                '</td>' +
+                                '</tr>';
+                        });
+                        $('#productList').html(html);
+                    }
+                });
+            });
+
             $('.deleteButton').on('click', function () {
                 var productId = $(this).data('product-id');
                 $('#productId').val(productId);
             });
 
             // Định dạng giá sản phẩm khi trang được tải
-            $('.price').each(function () {
-                var price = parseInt($(this).text());
-                var formattedPrice = price.toLocaleString('vi-VN') + " đ"; // Định dạng giá tiền và thêm đơn vị tiền tệ "đ"
-                $(this).text(formattedPrice);
-            });
+            function formatPrices() {
+                $('.price').each(function () {
+                    var price = parseInt($(this).text());
+                    var formattedPrice = price.toLocaleString('vi-VN') + " đ"; // Định dạng giá tiền và thêm đơn vị tiền tệ "đ"
+                    $(this).text(formattedPrice);
+                });
 
-            // Định dạng giá cũ khi trang được tải
-            $('.old-price').each(function () {
-                var oldPrice = parseInt($(this).text());
-                var formattedOldPrice = oldPrice.toLocaleString('vi-VN') + " đ"; // Định dạng giá tiền và thêm đơn vị tiền tệ "đ"
-                $(this).text(formattedOldPrice);
-            });
+                $('.old-price').each(function () {
+                    var oldPrice = parseInt($(this).text());
+                    var formattedOldPrice = oldPrice.toLocaleString('vi-VN') + " đ"; // Định dạng giá tiền và thêm đơn vị tiền tệ "đ"
+                    $(this).text(formattedOldPrice);
+                });
+            }
+
+            // Gọi hàm định dạng giá khi trang được tải
+            formatPrices();
+
+            // Cập nhật ID tự động
+            function updateProductId() {
+                var rows = document.querySelectorAll('.table tbody tr');
+                rows.forEach((row, index) => {
+                    var productIdCell = row.querySelector('td:first-child');
+                    productIdCell.textContent = index + 1;
+                });
+            }
+
+            // Gọi hàm cập nhật ID tự động khi trang được tải
+            updateProductId();
         });
-
-        // Cập nhật ID tự động
-        function updateProductId() {
-            var rows = document.querySelectorAll('.table tbody tr');
-            rows.forEach((row, index) => {
-                var productIdCell = row.querySelector('td:first-child');
-                productIdCell.textContent = index + 1;
-            });
-        }
-
-        // Gọi hàm cập nhật ID tự động khi trang được tải
-        updateProductId();
     </script>
 }

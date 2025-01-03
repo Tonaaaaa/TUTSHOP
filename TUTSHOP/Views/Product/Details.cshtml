@@ -47,8 +47,9 @@
                 <div class="prod_info">
                     <h1>@Html.DisplayFor(model => model.ProductName)</h1>
                     <span class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i><em>4 reviews</em></span>
-                    <p><small>Category: @Html.DisplayFor(model => model.CategoryId)</small>@* <br>@Html.DisplayFor(model => model.Description) *@</p>
-                    <div class="prod_options">
+                    <p><h6>Loại: @Html.DisplayFor(model => model.Category.CategoryName)</h6>@* <br>@Html.DisplayFor(model => model.Description) *@</p>
+                    <p><h6>Mô tả: @Html.DisplayFor(model => model.Description)</h6>@* <br>@Html.DisplayFor(model => model.Description) *@</p>
+                    @* <div class="prod_options">
                         <div class="row">
                             <label class="col-xl-5 col-lg-5 col-md-6 col-6 pt-0"><strong>Màu sắc: </strong></label>
                             <div class="col-xl-4 col-lg-5 col-md-6 col-6 colors">
@@ -73,7 +74,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> *@
                     <div class="row">
                         <div class="col-lg-5 col-md-6">
                             <div class="price_main">

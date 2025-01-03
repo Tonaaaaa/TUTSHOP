@@ -54,6 +54,32 @@
                     @* <input type="submit" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2">Sign In</a> *@
                     
                 </form>
+                @{
+                    if ((Model.ExternalLogins?.Count ?? 0) == 0)
+                    {
+                        <div>
+                            <p>
+                                There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">
+                                    article
+                                    about setting up this ASP.NET application to support logging in via external services
+                                </a>.
+                            </p>
+                        </div>
+                    }
+                    else
+                    {
+                        <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                            <div>
+                                <p>
+                                    @foreach (var provider in Model.ExternalLogins!)
+                                    {
+                                        <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                                    }
+                                </p>
+                            </div>
+                        </form>
+                    }
+                }
                 <p class="text-center">
                     <span>Bạn muốn tạo tài khoản?</span>
                     <a asp-area="Identity" asp-controller="Account" asp-action="Register"><span>Tạo tài khoản mới</span></a>

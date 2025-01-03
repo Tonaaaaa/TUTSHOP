@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using TUTSHOP.Models.Entities;
 using TUTSHOP.Models.Repositories;
-
+using X.PagedList;
 
 namespace TUTSHOP.Areas.Admin.Controllers
 {
@@ -22,10 +22,15 @@ namespace TUTSHOP.Areas.Admin.Controllers
             _categoryRepository = categoryRepository;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? page)
         {
+            int pageNumber = page ?? 1;
+            int pageSize = 10;
             var products = await _productRepository.GetAllAsync();
-            return View(products);
+            var pagedProducts = products.ToPagedList(pageNumber, pageSize);
+            var categories = await _categoryRepository.GetAllAsync();
+            ViewBag.Categories = new SelectList(categories, "CategoryId", "CategoryName");
+            return View(pagedProducts);
         }
 
         public async Task<IActionResult> Create()
@@ -35,58 +40,57 @@ namespace TUTSHOP.Areas.Admin.Controllers
             return View();
         }
 
-		[HttpPost]
-		public async Task<IActionResult> Create(Product product, IFormFile imageUrl)
-		{
-			if (ModelState.IsValid)
-			{
-				// Tính toán giá trị Price dựa trên OldPrice và DiscountId
-				if (product.OldPrice > 0 && product.DiscountId.HasValue && product.DiscountId > 0)
-				{
-					// Chuyển đổi DiscountId thành phần trăm và tính toán
-					float discount = (float)product.DiscountId.Value / 100;
-					product.Price = product.OldPrice - (product.OldPrice * discount);
-				}
-				else
-				{
-					product.Price = product.OldPrice; // Nếu không có DiscountId, giá sẽ là OldPrice
-				}
+        [HttpPost]
+        public async Task<IActionResult> Create(Product product, IFormFile imageUrl)
+        {
+            if (ModelState.IsValid)
+            {
+                // Tính toán giá trị Price dựa trên OldPrice và DiscountId
+                if (product.OldPrice > 0 && product.DiscountId.HasValue && product.DiscountId > 0)
+                {
+                    // Chuyển đổi DiscountId thành phần trăm và tính toán
+                    float discount = (float)product.DiscountId.Value / 100;
+                    product.Price = product.OldPrice - (product.OldPrice * discount);
+                }
+                else
+                {
+                    product.Price = product.OldPrice; // Nếu không có DiscountId, giá sẽ là OldPrice
+                }
 
-				product.DateCreated = DateTime.Now;
-				product.DateModified = DateTime.Now;
+                product.DateCreated = DateTime.Now;
+                product.DateModified = DateTime.Now;
 
-				if (imageUrl != null)
-				{
-					product.ImageUrl = await SaveImage(imageUrl);
-				}
+                if (imageUrl != null)
+                {
+                    product.ImageUrl = await SaveImage(imageUrl);
+                }
 
-				await _productRepository.AddAsync(product);
-				return RedirectToAction(nameof(Index));
-			}
+                await _productRepository.AddAsync(product);
+                return RedirectToAction(nameof(Index));
+            }
 
-			var categories = await _categoryRepository.GetAllAsync();
-			ViewBag.CategoryId = new SelectList(categories, "CategoryId", "CategoryName");
-			return View(product);
-		}
+            var categories = await _categoryRepository.GetAllAsync();
+            ViewBag.CategoryId = new SelectList(categories, "CategoryId", "CategoryName");
+            return View(product);
+        }
 
+        public async Task<IActionResult> Edit(int id)
+        {
+            var product = await _productRepository.GetByIdAsync(id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+            var categories = await _categoryRepository.GetAllAsync();
+            ViewBag.CategoryId = new SelectList(categories, "CategoryId", "CategoryName", product.CategoryId);
+            return View(product);
+        }
 
-		public async Task<IActionResult> Edit(int id)
-		{
-			var product = await _productRepository.GetByIdAsync(id);
-			if (product == null)
-			{
-				return NotFound();
-			}
-			var categories = await _categoryRepository.GetAllAsync();
-			ViewBag.CategoryId = new SelectList(categories, "CategoryId", "CategoryName", product.CategoryId);
-			return View(product);
-		}
-
-		[HttpPost]
-		public async Task<IActionResult> Edit(Product product, IFormFile imageUrl)
-		{
-			if (ModelState.IsValid)
-			{
+        [HttpPost]
+        public async Task<IActionResult> Edit(Product product, IFormFile imageUrl)
+        {
+            if (ModelState.IsValid)
+            {
                 if (product.OldPrice > 0 && product.DiscountId.HasValue && product.DiscountId > 0)
                 {
                     // Chuyển đổi DiscountId thành phần trăm và tính toán
@@ -100,20 +104,19 @@ namespace TUTSHOP.Areas.Admin.Controllers
                 product.DateCreated = DateTime.Now;
                 product.DateModified = DateTime.Now;
                 if (imageUrl != null)
-				{
-					product.ImageUrl = await SaveImage(imageUrl);
-				}
-				
-				await _productRepository.UpdateAsync(product);
-				return RedirectToAction(nameof(Index));
-			}
-			var categories = await _categoryRepository.GetAllAsync();
-			ViewBag.CategoryId = new SelectList(categories, "CategoryId", "CategoryName");
-			return View();
-		}
+                {
+                    product.ImageUrl = await SaveImage(imageUrl);
+                }
 
+                await _productRepository.UpdateAsync(product);
+                return RedirectToAction(nameof(Index));
+            }
+            var categories = await _categoryRepository.GetAllAsync();
+            ViewBag.CategoryId = new SelectList(categories, "CategoryId", "CategoryName");
+            return View();
+        }
 
-		public async Task<IActionResult> Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
             var product = await _productRepository.GetByIdAsync(id);
             if (product == null)
@@ -141,6 +144,18 @@ namespace TUTSHOP.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Search(string searchTerm, int? categoryId)
+        {
+            if (string.IsNullOrEmpty(searchTerm) && !categoryId.HasValue)
+            {
+                var allProducts = await _productRepository.GetAllAsync();
+                return Json(allProducts);
+            }
+
+            var products = await _productRepository.SearchProductsAsync(searchTerm);
+            return Json(products);
+        }
         private async Task<string> SaveImage(IFormFile image)
         {
             var savePath = Path.Combine("wwwroot/images", image.FileName);

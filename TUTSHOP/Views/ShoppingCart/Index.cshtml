@@ -55,7 +55,12 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
                             <span>Tổng tiền:</span>
-                            <strong id="totalAmount">0đ</strong>
+                            <strong id="totalAmount">@Model.GetTotalPrice().ToString("N0")đ</strong>
+                        </div>
+                        <div class="form-group mt-3">
+                            <label for="discountCode">Mã giảm giá:</label>
+                            <input type="text" id="discountCode" class="form-control" placeholder="Nhập mã giảm giá" disabled>
+                            <button type="button" id="applyDiscountButton" class="btn btn-primary mt-2" disabled>Áp dụng</button>
                         </div>
                     </div>
                     <div class="card-footer">
@@ -84,6 +89,8 @@ else
             var selectAllLabel = document.getElementById("selectAllLabel");
             var totalAmountElement = document.getElementById("totalAmount");
             var checkoutButton = document.getElementById("checkoutButton");
+            var discountCodeInput = document.getElementById("discountCode");
+            var applyDiscountButton = document.getElementById("applyDiscountButton");
 
             selectAllCheckbox.addEventListener("change", function () {
                 var isChecked = selectAllCheckbox.checked;
@@ -100,33 +107,20 @@ else
                     updateTotalAmount();
                     updateSelectAllCheckbox();
                     updateCheckoutButton();
+                    updateDiscountButton();
                 });
             });
 
             $(".quantity-input").on("input", function () {
                 var $input = $(this);
                 var $checkbox = $input.closest(".cart-item").find(".item-checkbox");
-                console.log($checkbox);
                 $checkbox.attr("data-quantity", $input.val());
                 if ($checkbox.is(":checked")) {
                     updateTotalAmount();
                 }
                 updateCheckoutButton();
+                updateDiscountButton();
             });
-
-            /*document.querySelectorAll(".quantity-increase").forEach(function (button) {
-                button.addEventListener("click", function () {
-                    var input = button.closest(".quantity-controls").querySelector(".quantity-input");
-                    var currentValue = parseInt(input.value);
-
-
-                    if (currentValue < 100) {
-                        input.value = currentValue + 1;
-                        input.dispatchEvent(new Event("input"));
-                    }
-                    updateCheckoutButton();
-                });
-            });*/
 
             $(".quantity-increase").each(function () {
                 $(this).on("click", function () {
@@ -141,16 +135,15 @@ else
                             quantity: currentValue + 1
                         },
                         success: function () {
-                            
+                            if (currentValue < 100) {
+                                $input.val(currentValue + 1);
+                                $input.trigger("input");
+                            }
+                            updateCheckoutButton();
+                            updateDiscountButton();
                         },
                         error: function () { }
                     });
-
-                    if (currentValue < 100) {
-                        $input.val(currentValue + 1);
-                        $input.trigger("input");
-                    }
-                    updateCheckoutButton();
                 });
             });
 
@@ -163,6 +156,27 @@ else
                     $input.trigger("input");
                 }
                 updateCheckoutButton();
+                updateDiscountButton();
+            });
+
+            $('#applyDiscountButton').on('click', function () {
+                var discountCode = $('#discountCode').val();
+                $.ajax({
+                    url: '@Url.Action("ApplyDiscount", "ShoppingCart")',
+                    type: 'POST',
+                    data: { discountCode: discountCode },
+                    success: function (result) {
+                        if (result.success) {
+                            alert('Mã giảm giá đã được áp dụng. Bạn được giảm ' + result.discountAmount + ' đ');
+                            $('#totalAmount').text(result.newTotalPrice + ' đ');
+                        } else {
+                            alert(result.message);
+                        }
+                    },
+                    error: function () {
+                        alert('Có lỗi xảy ra, vui lòng thử lại.');
+                    }
+                });
             });
 
             function updateTotalAmount() {
@@ -195,8 +209,22 @@ else
                 }
             }
 
-            // Initialize the checkout button text
+            function updateDiscountButton() {
+                var selectedItems = document.querySelectorAll(".item-checkbox:checked").length;
+                if (selectedItems === 0) {
+                    applyDiscountButton.classList.add("disabled");
+                    applyDiscountButton.disabled = true;
+                    discountCodeInput.disabled = true;
+                } else {
+                    applyDiscountButton.classList.remove("disabled");
+                    applyDiscountButton.disabled = false;
+                    discountCodeInput.disabled = false;
+                }
+            }
+
+            // Initialize the checkout button text and discount button state
             updateCheckoutButton();
+            updateDiscountButton();
         });
     </script>
 }

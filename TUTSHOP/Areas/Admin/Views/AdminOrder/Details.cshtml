@@ -1,26 +1,51 @@
 ﻿@model TUTSHOP.Models.Entities.Order
+@using TUTSHOP.Models.Entities
 
 <div class="container mt-4">
-    <h2>Chi tiết đơn hàng</h2>
+    <h2 class="text-center">Chi tiết đơn hàng</h2>
     <div class="row">
         <div class="col-md-6">
             <h4>Thông tin đơn hàng</h4>
-            <p>Mã đơn hàng: @Model.Id</p>
-            <p>Người dùng: @Model.ApplicationUser.FullName</p>
-            <p>Ngày đặt: @Model.OrderDate.ToString("dd/MM/yyyy")</p>
-            <p>Tổng tiền: @string.Format("{0:N0}", @Model.TotalPrice) đ</p>
-            <p>Địa chỉ giao hàng: @Model.ShippingAddress</p>
-            <p>Ghi chú: @Model.Notes</p>
-            <p>Phương thức thanh toán: @Model.PaymentMethod</p>
-            <p>Trạng thái đơn hàng: @Model.OrderStatus</p>
+            <div class="card p-3 mb-3">
+                <p><strong>Mã đơn hàng:</strong> @Model.Id</p>
+                <p><strong>Người dùng:</strong> @Model.ApplicationUser.FullName</p>
+                <p><strong>Ngày đặt:</strong> @Model.OrderDate.ToString("dd/MM/yyyy")</p>
+                <p><strong>Tổng tiền:</strong> @string.Format("{0:N0}", @Model.TotalPrice) đ</p>
+                <p><strong>Địa chỉ giao hàng:</strong> @Model.ShippingAddress</p>
+                <p><strong>Số điện thoại:</strong> @Model.ApplicationUser.PhoneNumber</p>
+                <p><strong>Ghi chú:</strong> @Model.Notes</p>
+                <p><strong>Phương thức thanh toán:</strong> @Model.PaymentMethod</p>
+                <p><strong>Trạng thái đơn hàng:</strong> @Model.OrderStatus</p>
+
+                <!-- Thêm form để cập nhật trạng thái -->
+                <form asp-action="UpdateOrderStatus" method="post" class="mt-3">
+                    <input type="hidden" name="orderId" value="@Model.Id" />
+                    <div class="form-group">
+                        <label for="newStatus">Cập nhật trạng thái:</label>
+                        <select id="newStatus" name="newStatus" class="form-control">
+                            @foreach (OrderStatus status in Enum.GetValues(typeof(OrderStatus)))
+                            {
+                                var isSelected = Model.OrderStatus == status ? "selected" : "";
+                                <option value="@status" selected>@status</option>
+                            }
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-2">Cập nhật</button>
+                </form>
+
+                @if (Model.OrderStatus == OrderStatus.Paid)
+                {
+                    <a asp-action="ExportInvoice" asp-route-id="@Model.Id" class="btn btn-success mt-2">Xuất hóa đơn</a>
+                }
+            </div>
         </div>
     </div>
-    <h4>Chi tiết sản phẩm</h4>
+    <h4 class="mt-4">Chi tiết sản phẩm</h4>
     <table class="table table-striped">
         <thead>
             <tr>
                 <th>Sản phẩm</th>
-                <th>Giá</th>
+                <th>Giá đơn lẻ</th>
                 <th>Số lượng</th>
                 <th>Thành tiền</th>
             </tr>
@@ -30,9 +55,9 @@
             {
                 <tr>
                     <td>@item.Product.ProductName</td>
-                    <td>@string.Format("{0:N0}", @item.Price / @item.Quantity) đ</td> <!-- Giá đơn lẻ -->
+                    <td>@string.Format("{0:N0}", item.Price / item.Quantity) đ</td>
                     <td>@item.Quantity</td>
-                    <td>@string.Format("{0:N0}", @item.Price) đ</td> <!-- Giá tổng cộng -->
+                    <td>@string.Format("{0:N0}", item.Price) đ</td>
                 </tr>
             }
         </tbody>

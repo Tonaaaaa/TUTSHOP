@@ -11,5 +11,6 @@ namespace TUTSHOP.Models.Repositories
         Task DeleteAsync(int id);
         Task<IEnumerable<Product>> SearchAsync(string keyword);
         Task<IEnumerable<Product>> GetByCategoryAsync(string category);
+        Task<IEnumerable<Product>> SearchProductsAsync(string searchTerm);
     }
 }

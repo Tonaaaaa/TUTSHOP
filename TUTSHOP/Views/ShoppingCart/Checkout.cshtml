@@ -18,24 +18,25 @@
             <div class="form-group mb-4">
                 <label class="form-label">Phương thức thanh toán</label>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="paymentMethod" id="paymentMethod1" value="Thanh toán tiền mặt" required>
+                    <input class="form-check-input" type="radio" name="paymentMethod" id="paymentMethod1" value="COD" required>
                     <label class="form-check-label" for="paymentMethod1">
                         Thanh toán tiền mặt
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="paymentMethod" id="paymentMethod2" value="credit_card" required>
+                    <input class="form-check-input" type="radio" name="paymentMethod" id="paymentMethod2" value="VNPay" required>
                     <label class="form-check-label" for="paymentMethod2">
-                        Credit Card
+                        VNPay
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="paymentMethod" id="paymentMethod3" value="paypal" required>
+                    <input class="form-check-input" type="radio" name="paymentMethod" id="paymentMethod3" value="Paypal" required>
                     <label class="form-check-label" for="paymentMethod3">
                         PayPal
                     </label>
                 </div>
             </div>
+            <input type="hidden" name="selectedProductIds" id="selectedProductIds" />
             <button type="submit" class="btn btn-primary">Đặt hàng</button>
             <a asp-controller="ShoppingCart" asp-action="Index" class="btn btn-outline-dark ms-2">
                 <i class="bi-cart-fill me-1"></i> Quay lại
@@ -43,3 +44,15 @@
         </form>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var selectedProductIds = [];
+            document.querySelectorAll(".item-checkbox:checked").forEach(function (checkbox) {
+                selectedProductIds.push(checkbox.getAttribute("data-id"));
+            });
+            document.getElementById("selectedProductIds").value = selectedProductIds.join(",");
+        });
+    </script>
+}
